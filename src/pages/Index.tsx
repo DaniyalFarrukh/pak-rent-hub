@@ -1,51 +1,95 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign } from 'lucide-react';
+import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign, Award, CheckCircle, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import ChatBot from '@/components/ChatBot';
 
 interface Category {
   name: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   description: string;
+  itemCount: number;
 }
 
 const categories: Category[] = [
-  { name: 'Vehicles', icon: Car, description: 'Cars, motorcycles, and more' },
-  { name: 'Clothing', icon: Shirt, description: 'Dresses, suits, and accessories' },
-  { name: 'Tools', icon: Wrench, description: 'Drills, saws, and toolsets' },
-  { name: 'Electronics', icon: Laptop, description: 'Laptops, tablets, and gadgets' },
-  { name: 'Photography', icon: Camera, description: 'Cameras, lenses, and equipment' },
+  { name: 'Vehicles', icon: Car, description: 'Cars, motorcycles, bikes', itemCount: 1200 },
+  { name: 'Wedding Dresses', icon: Shirt, description: 'Bridal wear, formal dresses', itemCount: 850 },
+  { name: 'Tools & Equipment', icon: Wrench, description: 'Power tools, construction gear', itemCount: 650 },
+  { name: 'Electronics', icon: Laptop, description: 'Laptops, gaming, cameras', itemCount: 950 },
+  { name: 'Event Equipment', icon: Camera, description: 'Photography, sound systems', itemCount: 450 },
 ];
 
 interface Testimonial {
   name: string;
   text: string;
   rating: number;
+  location: string;
+  category: string;
 }
 
 const testimonials: Testimonial[] = [
-  { name: 'Aisha Khan', text: 'PakRent made renting a car so easy and affordable. Highly recommended!', rating: 5 },
-  { name: 'Imran Ali', text: 'I rented a camera for my cousin wedding and the quality was amazing. Great service!', rating: 4 },
+  { 
+    name: 'Aisha Khan', 
+    text: 'Rented a beautiful bridal dress for my sister\'s wedding. The quality was amazing and saved us thousands!', 
+    rating: 5,
+    location: 'Lahore',
+    category: 'Wedding Dress'
+  },
+  { 
+    name: 'Ahmed Ali', 
+    text: 'Perfect car rental service for my family trip to Murree. Clean vehicle and honest pricing.', 
+    rating: 5,
+    location: 'Islamabad',
+    category: 'Vehicle'
+  },
+  { 
+    name: 'Fatima Sheikh', 
+    text: 'Needed professional camera equipment for my photography business. Great selection and fair rates.', 
+    rating: 4,
+    location: 'Karachi',
+    category: 'Photography'
+  },
+];
+
+const trustFeatures = [
+  { icon: Shield, title: 'Verified Renters', description: 'All renters verified with CNIC and background checks' },
+  { icon: DollarSign, title: 'Secure Payments', description: 'Escrow system with multiple payment options' },
+  { icon: Clock, title: '24/7 Support', description: 'Customer service available around the clock' },
+  { icon: CheckCircle, title: 'Quality Guarantee', description: 'All items quality-checked before listing' },
 ];
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  const handleSearch = () => {
+    console.log('Searching for:', searchQuery, 'in', selectedLocation);
+    // TODO: Implement search functionality
+  };
 
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
+      <nav className="bg-white shadow-lg border-b sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-green-600">PakRent</h1>
+              <Link to="/" className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">P</span>
+                </div>
+                <h1 className="text-2xl font-bold text-green-600">PakRent</h1>
+              </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#categories" className="text-gray-700 hover:text-green-600 font-medium">Categories</a>
+              <Link to="/browse" className="text-gray-700 hover:text-green-600 font-medium transition-colors">Browse</Link>
+              <Link to="/list-item" className="text-gray-700 hover:text-green-600 font-medium transition-colors">List Your Item</Link>
               <a href="#how-it-works" className="text-gray-700 hover:text-green-600 font-medium">How it Works</a>
-              <a href="#contact" className="text-gray-700 hover:text-green-600 font-medium">Contact</a>
+              <a href="#contact" className="text-gray-700 hover:text-green-600 font-medium">Support</a>
               <div className="flex items-center space-x-4">
                 <Link 
                   to="/login" 
@@ -55,9 +99,9 @@ const Index = () => {
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
                 >
-                  Sign Up
+                  Join Now
                 </Link>
               </div>
             </div>
@@ -78,10 +122,11 @@ const Index = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <a href="#categories" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Categories</a>
+              <Link to="/browse" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Browse</Link>
+              <Link to="/list-item" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">List Your Item</Link>
               <a href="#how-it-works" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">How it Works</a>
-              <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Contact</a>
-              <div className="border-t pt-4 mt-4">
+              <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Support</a>
+              <div className="border-t pt-4 mt-4 space-y-2">
                 <Link 
                   to="/login" 
                   className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium"
@@ -90,9 +135,9 @@ const Index = () => {
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="block mx-3 mt-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium text-center"
+                  className="block mx-3 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium text-center"
                 >
-                  Sign Up
+                  Join Now
                 </Link>
               </div>
             </div>
@@ -101,36 +146,122 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-50 to-emerald-100 py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-extrabold text-green-700 mb-4">
-            Find the Best Rentals in Pakistan
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Discover a wide range of items to rent, from vehicles to electronics, all in one place.
-          </p>
-          <div className="max-w-md mx-auto">
-            <Input type="text" placeholder="Search for rentals" className="rounded-full h-12" />
-            <Button className="ml-4 rounded-full h-12">
-              <Search className="w-5 h-5 mr-2" />
-              Search
-            </Button>
+      <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-blue-50 py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6">
+              Rent Anything, <span className="text-green-600">Anytime</span>, Anywhere
+            </h2>
+            <p className="text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Pakistan's most trusted rental marketplace. From cars to wedding dresses, find everything you need without buying.
+            </p>
+            
+            {/* Enhanced Search Bar */}
+            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 border">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="md:col-span-2">
+                  <Input 
+                    type="text" 
+                    placeholder="What do you want to rent?" 
+                    className="h-14 text-lg border-gray-300 focus:border-green-500"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <select 
+                    className="w-full h-14 px-4 border border-gray-300 rounded-lg text-lg focus:border-green-500 focus:outline-none"
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                  >
+                    <option value="">Select City</option>
+                    <option value="karachi">Karachi</option>
+                    <option value="lahore">Lahore</option>
+                    <option value="islamabad">Islamabad</option>
+                    <option value="rawalpindi">Rawalpindi</option>
+                    <option value="faisalabad">Faisalabad</option>
+                  </select>
+                </div>
+                <div>
+                  <Button 
+                    className="w-full h-14 bg-green-600 hover:bg-green-700 text-lg font-semibold shadow-lg"
+                    onClick={handleSearch}
+                  >
+                    <Search className="w-6 h-6 mr-2" />
+                    Search
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">50K+</div>
+                <div className="text-gray-600">Active Listings</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">25K+</div>
+                <div className="text-gray-600">Happy Customers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">15+</div>
+                <div className="text-gray-600">Cities Covered</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">4.8★</div>
+                <div className="text-gray-600">Average Rating</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section id="categories" className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-semibold text-green-700 mb-8 text-center">
-            Explore Rental Categories
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Featured Categories */}
+      <section id="categories" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              Explore Rental Categories
+            </h3>
+            <p className="text-xl text-gray-600">From everyday essentials to special occasions</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
             {categories.map((category, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-                <category.icon className="w-8 h-8 text-green-500 mb-4" />
-                <h4 className="text-xl font-semibold text-gray-800 mb-2">{category.name}</h4>
-                <p className="text-gray-600">{category.description}</p>
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-green-200">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-4 p-4 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                    <category.icon className="w-8 h-8 text-green-600" />
+                  </div>
+                  <CardTitle className="text-xl text-gray-900">{category.name}</CardTitle>
+                  <CardDescription className="text-gray-600">{category.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-sm text-green-600 font-semibold">{category.itemCount}+ items available</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Security Features */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              Why Choose PakRent?
+            </h3>
+            <p className="text-xl text-gray-600">Your safety and satisfaction are our top priorities</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {trustFeatures.map((feature, index) => (
+              <div key={index} className="text-center group">
+                <div className="mx-auto mb-6 p-4 bg-white rounded-full shadow-lg group-hover:shadow-xl transition-shadow">
+                  <feature.icon className="w-8 h-8 text-green-600" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h4>
+                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -138,77 +269,177 @@ const Index = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-semibold text-green-700 mb-8 text-center">
-            How PakRent Works
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div className="text-center">
-              <Clock className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-gray-800 mb-2">Browse and Select</h4>
-              <p className="text-gray-600">Find the item you need from our extensive catalog.</p>
+      <section id="how-it-works" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              How PakRent Works
+            </h3>
+            <p className="text-xl text-gray-600">Simple, secure, and hassle-free rental process</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center relative">
+              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Search className="w-8 h-8 text-green-600" />
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">1. Browse & Search</h4>
+              <p className="text-gray-600">Find the perfect item from thousands of verified listings across Pakistan</p>
+              {/* Connection line */}
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
             </div>
-            {/* Step 2 */}
-            <div className="text-center">
-              <Calendar className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-gray-800 mb-2">Book and Reserve</h4>
-              <p className="text-gray-600">Choose your rental dates and make a reservation.</p>
+            <div className="text-center relative">
+              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Calendar className="w-8 h-8 text-green-600" />
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">2. Book & Reserve</h4>
+              <p className="text-gray-600">Choose your dates, confirm availability, and secure your rental</p>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
             </div>
-            {/* Step 3 */}
+            <div className="text-center relative">
+              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <DollarSign className="w-8 h-8 text-green-600" />
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">3. Pay Securely</h4>
+              <p className="text-gray-600">Multiple payment options with escrow protection for your peace of mind</p>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
+            </div>
             <div className="text-center">
-              <DollarSign className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-gray-800 mb-2">Rent and Enjoy</h4>
-              <p className="text-gray-600">Pick up your item and enjoy your rental experience.</p>
+              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Star className="w-8 h-8 text-green-600" />
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">4. Enjoy & Review</h4>
+              <p className="text-gray-600">Use your rental and share your experience to help others</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-semibold text-green-700 mb-8 text-center">
-            What Our Customers Say
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              What Our Customers Say
+            </h3>
+            <p className="text-xl text-gray-600">Real stories from real customers across Pakistan</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-4">"{testimonial.text}"</p>
-                <p className="text-gray-800 font-semibold">- {testimonial.name}</p>
-              </div>
+              <Card key={index} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <span className="text-sm text-green-600 font-medium">{testimonial.category}</span>
+                  </div>
+                  <p className="text-gray-700 italic mb-4">"{testimonial.text}"</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <p className="text-gray-900 font-semibold">— {testimonial.name}</p>
+                    <div className="flex items-center text-gray-500 text-sm">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      {testimonial.location}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
+      {/* CTA Section for Renters */}
+      <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-6">
+            <TrendingUp className="w-16 h-16 text-white" />
+          </div>
+          <h3 className="text-4xl font-bold text-white mb-6">
+            Start Earning with Your Items
+          </h3>
+          <p className="text-xl text-green-100 mb-8">
+            Turn your unused items into a steady income stream. Join thousands of verified renters across Pakistan.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/signup">
+              <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
+                Become a Renter
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 text-lg font-semibold">
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
-      <section id="contact" className="bg-gradient-to-br from-emerald-100 to-green-50 py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-3xl font-semibold text-green-700 mb-8">
-            Contact Us
+      <section id="contact" className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-4xl font-bold text-gray-900 mb-6">
+            Need Help? We're Here for You
           </h3>
           <p className="text-xl text-gray-600 mb-8">
-            Have questions or need assistance? Reach out to our support team.
+            Our customer support team is available 24/7 to assist you with any questions or concerns.
           </p>
-          <Button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-8 py-3">
-            Get in Touch
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button className="bg-green-600 hover:bg-green-700 px-8 py-4 text-lg">
+              Chat with Support
+            </Button>
+            <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50 px-8 py-4 text-lg">
+              Call +92-300-PAKRENT
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t py-8">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-600">
-            &copy; {new Date().getFullYear()} PakRent. All rights reserved.
-          </p>
+      <footer className="bg-gray-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">P</span>
+                </div>
+                <h3 className="text-2xl font-bold">PakRent</h3>
+              </div>
+              <p className="text-gray-400 mb-4">Pakistan's trusted rental marketplace connecting renters and customers nationwide.</p>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">For Customers</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="/browse" className="hover:text-white transition-colors">Browse Items</Link></li>
+                <li><Link to="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
+                <li><Link to="/safety" className="hover:text-white transition-colors">Safety Center</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">For Renters</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="/list-item" className="hover:text-white transition-colors">List Your Item</Link></li>
+                <li><Link to="/renter-guide" className="hover:text-white transition-colors">Renter Guide</Link></li>
+                <li><Link to="/verification" className="hover:text-white transition-colors">Get Verified</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#contact" className="hover:text-white transition-colors">Contact Us</a></li>
+                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; {new Date().getFullYear()} PakRent. All rights reserved. Made with ❤️ in Pakistan.</p>
+          </div>
         </div>
       </footer>
 

@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft, Award, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +29,6 @@ const Signup = () => {
       alert('Passwords do not match');
       return;
     }
-    // Handle signup logic here
     console.log('Signup form submitted:', { ...formData, userType });
   };
 
@@ -58,46 +58,71 @@ const Signup = () => {
         {/* Signup Form Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Join PakRent</h1>
-            <p className="text-gray-600">Create your account and start renting today</p>
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">P</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900">PakRent</h1>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join PakRent Today</h2>
+            <p className="text-gray-600">Create your account and start your rental journey</p>
           </div>
 
           {/* User Type Selection */}
           <div className="mb-8">
             <Label className="text-sm font-medium text-gray-700 mb-4 block">
-              I want to:
+              Choose your account type:
             </Label>
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                type="button"
-                onClick={() => setUserType('customer')}
-                className={`p-4 rounded-lg border-2 transition-all ${
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card 
+                className={`cursor-pointer transition-all ${
                   userType === 'customer'
-                    ? 'border-green-500 bg-green-50 text-green-700'
+                    ? 'border-green-500 bg-green-50 ring-2 ring-green-200'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
-                aria-pressed={userType === 'customer'}
+                onClick={() => setUserType('customer')}
               >
-                <div className="text-center">
-                  <div className="text-lg font-semibold">Rent Items</div>
-                  <div className="text-sm text-gray-600">Find and rent what you need</div>
-                </div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType('renter')}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-3 p-3 bg-blue-100 rounded-full w-fit">
+                    <User className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <CardTitle className="text-lg">I'm a Customer</CardTitle>
+                  <CardDescription>I want to rent items from others</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>• Browse thousands of items</li>
+                    <li>• Rent anything you need</li>
+                    <li>• Secure payment protection</li>
+                    <li>• 24/7 customer support</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card 
+                className={`cursor-pointer transition-all ${
                   userType === 'renter'
-                    ? 'border-green-500 bg-green-50 text-green-700'
+                    ? 'border-green-500 bg-green-50 ring-2 ring-green-200'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
-                aria-pressed={userType === 'renter'}
+                onClick={() => setUserType('renter')}
               >
-                <div className="text-center">
-                  <div className="text-lg font-semibold">List Items</div>
-                  <div className="text-sm text-gray-600">Earn money by renting out</div>
-                </div>
-              </button>
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-3 p-3 bg-green-100 rounded-full w-fit">
+                    <DollarSign className="w-6 h-6 text-green-600" />
+                  </div>
+                  <CardTitle className="text-lg">I'm a Renter</CardTitle>
+                  <CardDescription>I want to list my items for rent</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>• Earn money from your items</li>
+                    <li>• Set your own prices</li>
+                    <li>• Get verified renter badge</li>
+                    <li>• Dashboard & analytics</li>
+                  </ul>
+                </CardContent>
+              </Card>
             </div>
           </div>
 
@@ -238,6 +263,21 @@ const Signup = () => {
               </div>
             </div>
 
+            {/* Verification Notice for Renters */}
+            {userType === 'renter' && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <Award className="w-5 h-5 text-yellow-600 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-yellow-800">Verification Required</h4>
+                    <p className="text-sm text-yellow-700 mt-1">
+                      As a renter, you'll need to complete identity verification (CNIC upload) after signup to start listing items.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Checkboxes */}
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
@@ -250,7 +290,7 @@ const Signup = () => {
                   required
                 />
                 <Label htmlFor="agreeToTerms" className="text-sm text-gray-600 leading-relaxed">
-                  I agree to the{' '}
+                  I agree to PakRent's{' '}
                   <Link to="/terms" className="text-green-600 hover:text-green-700 underline">
                     Terms of Service
                   </Link>{' '}
@@ -269,7 +309,7 @@ const Signup = () => {
                   }
                 />
                 <Label htmlFor="agreeToMarketing" className="text-sm text-gray-600">
-                  I want to receive promotional emails and updates
+                  Send me promotional emails, rental tips, and platform updates
                 </Label>
               </div>
             </div>
@@ -280,7 +320,7 @@ const Signup = () => {
               className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
               disabled={!formData.agreeToTerms}
             >
-              Create Account
+              Create {userType === 'renter' ? 'Renter' : 'Customer'} Account
             </Button>
 
             {/* Divider */}
