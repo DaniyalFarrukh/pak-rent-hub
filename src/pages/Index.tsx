@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import ChatBot from '@/components/ChatBot';
 
 interface Category {
   name: string;
@@ -210,6 +211,9 @@ const Index = () => {
           </p>
         </div>
       </footer>
+
+      {/* ChatBot Component */}
+      <ChatBot />
     </div>
   );
 };
