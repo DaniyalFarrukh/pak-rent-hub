@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Phone, Smartphone } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Phone, Smartphone, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,13 +31,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back to home link */}
         <div className="mb-6">
           <Link 
             to="/" 
-            className="inline-flex items-center text-green-600 hover:text-green-700 transition-colors"
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
             aria-label="Back to homepage"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -49,10 +49,20 @@ const Login = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">P</span>
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
+                  <Key className="w-6 h-6 text-white transform -rotate-12" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">R</span>
+                </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">PakRent</h1>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Easy Lease
+                </h1>
+                <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+              </div>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
             <p className="text-gray-600">Sign in to your account</p>
@@ -65,7 +75,7 @@ const Login = () => {
               onClick={() => setLoginMethod('email')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 loginMethod === 'email'
-                  ? 'bg-white text-green-600 shadow-sm'
+                  ? 'bg-white text-blue-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -77,7 +87,7 @@ const Login = () => {
               onClick={() => setLoginMethod('phone')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 loginMethod === 'phone'
-                  ? 'bg-white text-green-600 shadow-sm'
+                  ? 'bg-white text-blue-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -172,7 +182,7 @@ const Login = () => {
               </div>
               <Link 
                 to="/forgot-password" 
-                className="text-sm text-green-600 hover:text-green-700 font-medium"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
                 Forgot password?
               </Link>
@@ -181,7 +191,7 @@ const Login = () => {
             {/* Login Button */}
             <Button 
               type="submit" 
-              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-colors"
             >
               {loginMethod === 'phone' ? 'Send OTP' : 'Sign In'}
             </Button>
@@ -230,7 +240,7 @@ const Login = () => {
               Don't have an account?{' '}
               <Link 
                 to="/signup" 
-                className="text-green-600 hover:text-green-700 font-semibold"
+                className="text-blue-600 hover:text-blue-700 font-semibold"
               >
                 Sign up here
               </Link>

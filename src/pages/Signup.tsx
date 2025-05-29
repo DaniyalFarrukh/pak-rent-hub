@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft, Award, DollarSign } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft, Award, DollarSign, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,13 +41,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Back to home link */}
         <div className="mb-6">
           <Link 
             to="/" 
-            className="inline-flex items-center text-green-600 hover:text-green-700 transition-colors"
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
             aria-label="Back to homepage"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -59,12 +59,22 @@ const Signup = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">P</span>
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
+                  <Key className="w-6 h-6 text-white transform -rotate-12" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">R</span>
+                </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">PakRent</h1>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Easy Lease
+                </h1>
+                <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join PakRent Today</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join Easy Lease Today</h2>
             <p className="text-gray-600">Create your account and start your rental journey</p>
           </div>
 
@@ -77,7 +87,7 @@ const Signup = () => {
               <Card 
                 className={`cursor-pointer transition-all ${
                   userType === 'customer'
-                    ? 'border-green-500 bg-green-50 ring-2 ring-green-200'
+                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
                 onClick={() => setUserType('customer')}
@@ -102,7 +112,7 @@ const Signup = () => {
               <Card 
                 className={`cursor-pointer transition-all ${
                   userType === 'renter'
-                    ? 'border-green-500 bg-green-50 ring-2 ring-green-200'
+                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
                 onClick={() => setUserType('renter')}
@@ -290,12 +300,12 @@ const Signup = () => {
                   required
                 />
                 <Label htmlFor="agreeToTerms" className="text-sm text-gray-600 leading-relaxed">
-                  I agree to PakRent's{' '}
-                  <Link to="/terms" className="text-green-600 hover:text-green-700 underline">
+                  I agree to Easy Lease's{' '}
+                  <Link to="/terms" className="text-blue-600 hover:text-blue-700 underline">
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="text-green-600 hover:text-green-700 underline">
+                  <Link to="/privacy" className="text-blue-600 hover:text-blue-700 underline">
                     Privacy Policy
                   </Link>
                 </Label>
@@ -317,7 +327,7 @@ const Signup = () => {
             {/* Signup Button */}
             <Button 
               type="submit" 
-              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-colors"
               disabled={!formData.agreeToTerms}
             >
               Create {userType === 'renter' ? 'Renter' : 'Customer'} Account
@@ -367,7 +377,7 @@ const Signup = () => {
               Already have an account?{' '}
               <Link 
                 to="/login" 
-                className="text-green-600 hover:text-green-700 font-semibold"
+                className="text-blue-600 hover:text-blue-700 font-semibold"
               >
                 Sign in here
               </Link>
