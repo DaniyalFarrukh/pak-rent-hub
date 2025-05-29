@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign, Award, CheckCircle, TrendingUp } from 'lucide-react';
+import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign, Award, CheckCircle, TrendingUp, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -81,10 +81,12 @@ const Index = () => {
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">E</span>
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
+                    <Key className="w-6 h-6 text-white transform -rotate-12" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">R</span>
+                  </div>
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -416,10 +418,12 @@ const Index = () => {
             <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="relative">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">E</span>
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center transform rotate-12">
+                    <Key className="w-5 h-5 text-white transform -rotate-12" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">R</span>
+                  </div>
                 </div>
                 <h3 className="text-2xl font-bold">Easy Lease</h3>
               </div>

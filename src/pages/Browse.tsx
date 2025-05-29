@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, MapPin, Star, Heart, Calendar, DollarSign } from 'lucide-react';
+import { Search, Filter, MapPin, Star, Heart, Calendar, DollarSign, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -84,10 +84,12 @@ const Browse = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">E</span>
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
+                  <Key className="w-5 h-5 text-white transform -rotate-12" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">R</span>
+                </div>
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
