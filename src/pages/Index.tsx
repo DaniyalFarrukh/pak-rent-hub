@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign, Award, CheckCircle, TrendingUp } from 'lucide-react';
@@ -68,7 +67,8 @@ const Index = () => {
 
   const handleSearch = () => {
     console.log('Searching for:', searchQuery, 'in', selectedLocation);
-    // TODO: Implement search functionality
+    // Redirect to browse page with search params
+    window.location.href = `/browse?q=${encodeURIComponent(searchQuery)}&location=${encodeURIComponent(selectedLocation)}`;
   };
 
   return (
@@ -87,7 +87,7 @@ const Index = () => {
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/browse" className="text-gray-700 hover:text-green-600 font-medium transition-colors">Browse</Link>
-              <Link to="/list-item" className="text-gray-700 hover:text-green-600 font-medium transition-colors">List Your Item</Link>
+              <Link to="/post-item" className="text-gray-700 hover:text-green-600 font-medium transition-colors">List Your Item</Link>
               <a href="#how-it-works" className="text-gray-700 hover:text-green-600 font-medium">How it Works</a>
               <a href="#contact" className="text-gray-700 hover:text-green-600 font-medium">Support</a>
               <div className="flex items-center space-x-4">
@@ -123,7 +123,7 @@ const Index = () => {
           <div className="md:hidden bg-white border-t shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/browse" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Browse</Link>
-              <Link to="/list-item" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">List Your Item</Link>
+              <Link to="/post-item" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">List Your Item</Link>
               <a href="#how-it-works" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">How it Works</a>
               <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Support</a>
               <div className="border-t pt-4 mt-4 space-y-2">
@@ -228,18 +228,20 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
             {categories.map((category, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-green-200">
-                <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-4 p-4 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                    <category.icon className="w-8 h-8 text-green-600" />
-                  </div>
-                  <CardTitle className="text-xl text-gray-900">{category.name}</CardTitle>
-                  <CardDescription className="text-gray-600">{category.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-sm text-green-600 font-semibold">{category.itemCount}+ items available</p>
-                </CardContent>
-              </Card>
+              <Link to={`/browse?category=${encodeURIComponent(category.name)}`} key={index}>
+                <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-green-200">
+                  <CardHeader className="text-center pb-4">
+                    <div className="mx-auto mb-4 p-4 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                      <category.icon className="w-8 h-8 text-green-600" />
+                    </div>
+                    <CardTitle className="text-xl text-gray-900">{category.name}</CardTitle>
+                    <CardDescription className="text-gray-600">{category.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <p className="text-sm text-green-600 font-semibold">{category.itemCount}+ items available</p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
