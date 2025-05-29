@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Star, MapPin, Calendar, Shield, MessageCircle, Heart, Share2, Camera } from 'lucide-react';
@@ -17,7 +16,7 @@ const ItemDetail = () => {
     id: '1',
     title: 'Toyota Corolla 2020 - Perfect for City Tours',
     description: 'Well-maintained Toyota Corolla 2020 in excellent condition. Perfect for city tours, family trips, or business meetings. Features include air conditioning, power steering, automatic transmission, and GPS navigation. The car is regularly serviced and cleaned after each rental.',
-    price: 3500,
+    price: 8500,
     priceType: 'day',
     rating: 4.8,
     reviewCount: 23,

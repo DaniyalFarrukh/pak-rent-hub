@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Filter, MapPin, Star, Heart, Calendar, DollarSign, Key } from 'lucide-react';
@@ -25,7 +24,7 @@ const sampleItems: RentalItem[] = [
   {
     id: '1',
     title: 'Toyota Corolla 2020 - Perfect for City Tours',
-    price: 3500,
+    price: 8500,
     priceType: 'day',
     rating: 4.8,
     reviewCount: 23,
@@ -39,7 +38,7 @@ const sampleItems: RentalItem[] = [
   {
     id: '2',
     title: 'Designer Bridal Lehenga - Red & Gold',
-    price: 15000,
+    price: 25000,
     priceType: 'day',
     rating: 4.9,
     reviewCount: 45,
@@ -53,7 +52,7 @@ const sampleItems: RentalItem[] = [
   {
     id: '3',
     title: 'Professional DSLR Camera Canon 5D',
-    price: 2000,
+    price: 4500,
     priceType: 'day',
     rating: 4.7,
     reviewCount: 18,
