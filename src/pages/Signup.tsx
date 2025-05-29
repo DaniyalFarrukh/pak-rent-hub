@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,22 +42,23 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        {/* Back to home link */}
-        <div className="mb-6">
+        {/* Theme toggle and back link */}
+        <div className="mb-6 flex justify-between items-center">
           <Link 
             to="/" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
             aria-label="Back to homepage"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Link>
+          <ThemeToggle />
         </div>
 
         {/* Signup Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border dark:border-gray-700">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <div className="relative">
@@ -71,36 +73,36 @@ const Signup = () => {
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Easy Lease
                 </h1>
-                <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">Rental Made Simple</p>
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join Easy Lease Today</h2>
-            <p className="text-gray-600">Create your account and start your rental journey</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Join Easy Lease Today</h2>
+            <p className="text-gray-600 dark:text-gray-400">Create your account and start your rental journey</p>
           </div>
 
           {/* User Type Selection */}
           <div className="mb-8">
-            <Label className="text-sm font-medium text-gray-700 mb-4 block">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 block">
               Choose your account type:
             </Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card 
-                className={`cursor-pointer transition-all ${
+                className={`cursor-pointer transition-all dark:bg-gray-700 dark:border-gray-600 ${
                   userType === 'customer'
-                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-200 dark:ring-blue-400'
+                    : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                 }`}
                 onClick={() => setUserType('customer')}
               >
                 <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-3 p-3 bg-blue-100 rounded-full w-fit">
-                    <User className="w-6 h-6 text-blue-600" />
+                  <div className="mx-auto mb-3 p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full w-fit">
+                    <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <CardTitle className="text-lg">I'm a Customer</CardTitle>
-                  <CardDescription>I want to rent items from others</CardDescription>
+                  <CardTitle className="text-lg dark:text-white">I'm a Customer</CardTitle>
+                  <CardDescription className="dark:text-gray-400">I want to rent items from others</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                     <li>• Browse thousands of items</li>
                     <li>• Rent anything you need</li>
                     <li>• Secure payment protection</li>
@@ -110,22 +112,22 @@ const Signup = () => {
               </Card>
 
               <Card 
-                className={`cursor-pointer transition-all ${
+                className={`cursor-pointer transition-all dark:bg-gray-700 dark:border-gray-600 ${
                   userType === 'renter'
-                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-200 dark:ring-blue-400'
+                    : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                 }`}
                 onClick={() => setUserType('renter')}
               >
                 <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-3 p-3 bg-green-100 rounded-full w-fit">
-                    <DollarSign className="w-6 h-6 text-green-600" />
+                  <div className="mx-auto mb-3 p-3 bg-green-100 dark:bg-green-900/50 rounded-full w-fit">
+                    <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
-                  <CardTitle className="text-lg">I'm a Renter</CardTitle>
-                  <CardDescription>I want to list my items for rent</CardDescription>
+                  <CardTitle className="text-lg dark:text-white">I'm a Renter</CardTitle>
+                  <CardDescription className="dark:text-gray-400">I want to list my items for rent</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                     <li>• Earn money from your items</li>
                     <li>• Set your own prices</li>
                     <li>• Get verified renter badge</li>
@@ -140,36 +142,36 @@ const Signup = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="firstName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   First Name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                   <Input
                     id="firstName"
                     name="firstName"
                     type="text"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="pl-10 h-12"
+                    className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Enter first name"
                     required
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="lastName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Last Name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                   <Input
                     id="lastName"
                     name="lastName"
                     type="text"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="pl-10 h-12"
+                    className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Enter last name"
                     required
                   />
@@ -179,18 +181,18 @@ const Signup = () => {
 
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email Address
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                 <Input
                   id="email"
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="Enter your email"
                   required
                 />
@@ -199,18 +201,18 @@ const Signup = () => {
 
             {/* Phone Field */}
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Phone Number
               </Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                 <Input
                   id="phone"
                   name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="+92 300 1234567"
                   required
                 />
@@ -220,25 +222,25 @@ const Signup = () => {
             {/* Password Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                   <Input
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pl-10 pr-12 h-12"
+                    className="pl-10 pr-12 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Create password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -246,25 +248,25 @@ const Signup = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Confirm Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="pl-10 pr-12 h-12"
+                    className="pl-10 pr-12 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Confirm password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400"
                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                   >
                     {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -275,12 +277,12 @@ const Signup = () => {
 
             {/* Verification Notice for Renters */}
             {userType === 'renter' && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
-                  <Award className="w-5 h-5 text-yellow-600 mt-0.5" />
+                  <Award className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
                   <div>
-                    <h4 className="text-sm font-semibold text-yellow-800">Verification Required</h4>
-                    <p className="text-sm text-yellow-700 mt-1">
+                    <h4 className="text-sm font-semibold text-yellow-800 dark:text-yellow-300">Verification Required</h4>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-400 mt-1">
                       As a renter, you'll need to complete identity verification (CNIC upload) after signup to start listing items.
                     </p>
                   </div>
@@ -299,13 +301,13 @@ const Signup = () => {
                   }
                   required
                 />
-                <Label htmlFor="agreeToTerms" className="text-sm text-gray-600 leading-relaxed">
+                <Label htmlFor="agreeToTerms" className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   I agree to Easy Lease's{' '}
-                  <Link to="/terms" className="text-blue-600 hover:text-blue-700 underline">
+                  <Link to="/terms" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="text-blue-600 hover:text-blue-700 underline">
+                  <Link to="/privacy" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">
                     Privacy Policy
                   </Link>
                 </Label>
@@ -318,7 +320,7 @@ const Signup = () => {
                     setFormData(prev => ({ ...prev, agreeToMarketing: checked as boolean }))
                   }
                 />
-                <Label htmlFor="agreeToMarketing" className="text-sm text-gray-600">
+                <Label htmlFor="agreeToMarketing" className="text-sm text-gray-600 dark:text-gray-400">
                   Send me promotional emails, rental tips, and platform updates
                 </Label>
               </div>
@@ -336,10 +338,10 @@ const Signup = () => {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
               </div>
             </div>
 
@@ -348,7 +350,7 @@ const Signup = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-12 border-gray-300 hover:bg-gray-50"
+                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -361,7 +363,7 @@ const Signup = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-12 border-gray-300 hover:bg-gray-50"
+                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300"
               >
                 <svg className="w-5 h-5 mr-2" fill="#1877f2" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -373,11 +375,11 @@ const Signup = () => {
 
           {/* Login Link */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Already have an account?{' '}
               <Link 
                 to="/login" 
-                className="text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold"
               >
                 Sign in here
               </Link>
