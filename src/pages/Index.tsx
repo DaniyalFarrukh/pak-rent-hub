@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock, ChevronRight, Menu, X, MapPin, Calendar, DollarSign, Award, CheckCircle, TrendingUp } from 'lucide-react';
@@ -78,28 +79,36 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">P</span>
+              <Link to="/" className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-xl">E</span>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
-                <h1 className="text-2xl font-bold text-green-600">PakRent</h1>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Easy Lease
+                  </h1>
+                  <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+                </div>
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/browse" className="text-gray-700 hover:text-green-600 font-medium transition-colors">Browse</Link>
-              <Link to="/post-item" className="text-gray-700 hover:text-green-600 font-medium transition-colors">List Your Item</Link>
-              <a href="#how-it-works" className="text-gray-700 hover:text-green-600 font-medium">How it Works</a>
-              <a href="#contact" className="text-gray-700 hover:text-green-600 font-medium">Support</a>
+              <Link to="/browse" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Browse</Link>
+              <Link to="/post-item" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">List Your Item</Link>
+              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 font-medium">How it Works</a>
+              <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium">Support</a>
               <div className="flex items-center space-x-4">
                 <Link 
                   to="/login" 
-                  className="text-gray-700 hover:text-green-600 font-medium transition-colors"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-md hover:shadow-lg transform hover:scale-105"
                 >
                   Join Now
                 </Link>
@@ -108,7 +117,7 @@ const Index = () => {
             <div className="md:hidden">
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-700 hover:text-green-600"
+                className="text-gray-700 hover:text-blue-600"
                 aria-label="Toggle mobile menu"
                 aria-expanded={mobileMenuOpen}
               >
@@ -122,20 +131,20 @@ const Index = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/browse" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Browse</Link>
-              <Link to="/post-item" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">List Your Item</Link>
-              <a href="#how-it-works" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">How it Works</a>
-              <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium">Support</a>
+              <Link to="/browse" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Browse</Link>
+              <Link to="/post-item" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">List Your Item</Link>
+              <a href="#how-it-works" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">How it Works</a>
+              <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Support</a>
               <div className="border-t pt-4 mt-4 space-y-2">
                 <Link 
                   to="/login" 
-                  className="block px-3 py-2 text-gray-700 hover:text-green-600 font-medium"
+                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
                 >
                   Sign In
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="block mx-3 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium text-center"
+                  className="block mx-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium text-center"
                 >
                   Join Now
                 </Link>
@@ -146,11 +155,11 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-blue-50 py-20 lg:py-32">
+      <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6">
-              Rent Anything, <span className="text-green-600">Anytime</span>, Anywhere
+              Rent Anything, <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Effortlessly</span>
             </h2>
             <p className="text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Pakistan's most trusted rental marketplace. From cars to wedding dresses, find everything you need without buying.
@@ -163,14 +172,14 @@ const Index = () => {
                   <Input 
                     type="text" 
                     placeholder="What do you want to rent?" 
-                    className="h-14 text-lg border-gray-300 focus:border-green-500"
+                    className="h-14 text-lg border-gray-300 focus:border-blue-500"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
                 <div>
                   <select 
-                    className="w-full h-14 px-4 border border-gray-300 rounded-lg text-lg focus:border-green-500 focus:outline-none"
+                    className="w-full h-14 px-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:outline-none"
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
                   >
@@ -184,7 +193,7 @@ const Index = () => {
                 </div>
                 <div>
                   <Button 
-                    className="w-full h-14 bg-green-600 hover:bg-green-700 text-lg font-semibold shadow-lg"
+                    className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg font-semibold shadow-lg"
                     onClick={handleSearch}
                   >
                     <Search className="w-6 h-6 mr-2" />
@@ -197,19 +206,19 @@ const Index = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-3xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">50K+</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">50K+</div>
                 <div className="text-gray-600">Active Listings</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">25K+</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">25K+</div>
                 <div className="text-gray-600">Happy Customers</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">15+</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">15+</div>
                 <div className="text-gray-600">Cities Covered</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">4.8★</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">4.8★</div>
                 <div className="text-gray-600">Average Rating</div>
               </div>
             </div>
@@ -229,16 +238,16 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
             {categories.map((category, index) => (
               <Link to={`/browse?category=${encodeURIComponent(category.name)}`} key={index}>
-                <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-green-200">
+                <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-200">
                   <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-4 p-4 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                      <category.icon className="w-8 h-8 text-green-600" />
+                    <div className="mx-auto mb-4 p-4 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
+                      <category.icon className="w-8 h-8 text-blue-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">{category.name}</CardTitle>
                     <CardDescription className="text-gray-600">{category.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-sm text-green-600 font-semibold">{category.itemCount}+ items available</p>
+                    <p className="text-sm text-blue-600 font-semibold">{category.itemCount}+ items available</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -252,7 +261,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose PakRent?
+              Why Choose Easy Lease?
             </h3>
             <p className="text-xl text-gray-600">Your safety and satisfaction are our top priorities</p>
           </div>
@@ -260,7 +269,7 @@ const Index = () => {
             {trustFeatures.map((feature, index) => (
               <div key={index} className="text-center group">
                 <div className="mx-auto mb-6 p-4 bg-white rounded-full shadow-lg group-hover:shadow-xl transition-shadow">
-                  <feature.icon className="w-8 h-8 text-green-600" />
+                  <feature.icon className="w-8 h-8 text-blue-600" />
                 </div>
                 <h4 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h4>
                 <p className="text-gray-600">{feature.description}</p>
@@ -275,39 +284,39 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-gray-900 mb-4">
-              How PakRent Works
+              How Easy Lease Works
             </h3>
             <p className="text-xl text-gray-600">Simple, secure, and hassle-free rental process</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Search className="w-8 h-8 text-green-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Search className="w-8 h-8 text-blue-600" />
               </div>
               <h4 className="text-xl font-semibold text-gray-900 mb-3">1. Browse & Search</h4>
               <p className="text-gray-600">Find the perfect item from thousands of verified listings across Pakistan</p>
               {/* Connection line */}
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
             </div>
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-green-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Calendar className="w-8 h-8 text-blue-600" />
               </div>
               <h4 className="text-xl font-semibold text-gray-900 mb-3">2. Book & Reserve</h4>
               <p className="text-gray-600">Choose your dates, confirm availability, and secure your rental</p>
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
             </div>
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <DollarSign className="w-8 h-8 text-green-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <DollarSign className="w-8 h-8 text-blue-600" />
               </div>
               <h4 className="text-xl font-semibold text-gray-900 mb-3">3. Pay Securely</h4>
               <p className="text-gray-600">Multiple payment options with escrow protection for your peace of mind</p>
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-green-200 -translate-x-8"></div>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
             </div>
             <div className="text-center">
-              <div className="mx-auto mb-6 p-4 bg-green-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Star className="w-8 h-8 text-green-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
+                <Star className="w-8 h-8 text-blue-600" />
               </div>
               <h4 className="text-xl font-semibold text-gray-900 mb-3">4. Enjoy & Review</h4>
               <p className="text-gray-600">Use your rental and share your experience to help others</p>
@@ -355,7 +364,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section for Renters */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
             <TrendingUp className="w-16 h-16 text-white" />
@@ -363,17 +372,17 @@ const Index = () => {
           <h3 className="text-4xl font-bold text-white mb-6">
             Start Earning with Your Items
           </h3>
-          <p className="text-xl text-green-100 mb-8">
+          <p className="text-xl text-blue-100 mb-8">
             Turn your unused items into a steady income stream. Join thousands of verified renters across Pakistan.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/signup">
-              <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
+              <Button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
                 Become a Renter
                 <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 text-lg font-semibold">
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold">
               Learn More
             </Button>
           </div>
@@ -390,11 +399,11 @@ const Index = () => {
             Our customer support team is available 24/7 to assist you with any questions or concerns.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-green-600 hover:bg-green-700 px-8 py-4 text-lg">
+            <Button className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg">
               Chat with Support
             </Button>
-            <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50 px-8 py-4 text-lg">
-              Call +92-300-PAKRENT
+            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg">
+              Call +92-300-EASYLEASE
             </Button>
           </div>
         </div>
@@ -405,11 +414,14 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">P</span>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="relative">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold text-lg">E</span>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
                 </div>
-                <h3 className="text-2xl font-bold">PakRent</h3>
+                <h3 className="text-2xl font-bold">Easy Lease</h3>
               </div>
               <p className="text-gray-400 mb-4">Pakistan's trusted rental marketplace connecting renters and customers nationwide.</p>
             </div>
@@ -440,7 +452,7 @@ const Index = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} PakRent. All rights reserved. Made with ❤️ in Pakistan.</p>
+            <p>&copy; {new Date().getFullYear()} Easy Lease. All rights reserved. Made with ❤️ in Pakistan.</p>
           </div>
         </div>
       </footer>

@@ -82,11 +82,19 @@ const Browse = () => {
       <header className="bg-white shadow-sm border-b sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">P</span>
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="relative">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-lg">E</span>
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
-              <h1 className="text-2xl font-bold text-green-600">PakRent</h1>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Easy Lease
+                </h1>
+                <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+              </div>
             </Link>
             
             {/* Search Bar */}
@@ -96,7 +104,7 @@ const Browse = () => {
                 <Input
                   type="text"
                   placeholder="Search for anything..."
-                  className="pl-10 pr-4 h-12 text-lg border-gray-300 focus:border-green-500"
+                  className="pl-10 pr-4 h-12 text-lg border-gray-300 focus:border-blue-500"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -120,7 +128,7 @@ const Browse = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                   <select 
-                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-green-500 focus:outline-none"
+                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                   >
@@ -132,7 +140,7 @@ const Browse = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
                   <select 
-                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-green-500 focus:outline-none"
+                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
                   >
@@ -147,13 +155,13 @@ const Browse = () => {
                     <input 
                       type="number" 
                       placeholder="Min"
-                      className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-green-500 focus:outline-none"
+                      className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
                     />
                     <span>-</span>
                     <input 
                       type="number" 
                       placeholder="Max"
-                      className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-green-500 focus:outline-none"
+                      className="w-full h-10 px-3 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -169,7 +177,7 @@ const Browse = () => {
           <h2 className="text-2xl font-bold text-gray-900">
             {sampleItems.length} rentals available
           </h2>
-          <select className="h-10 px-3 border border-gray-300 rounded-md focus:border-green-500 focus:outline-none">
+          <select className="h-10 px-3 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none">
             <option>Sort by: Relevance</option>
             <option>Price: Low to High</option>
             <option>Price: High to Low</option>
@@ -188,7 +196,7 @@ const Browse = () => {
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 {item.featured && (
-                  <span className="absolute top-3 left-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                  <span className="absolute top-3 left-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
                     Featured
                   </span>
                 )}
@@ -199,7 +207,7 @@ const Browse = () => {
               
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-1 rounded-full">
+                  <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-full">
                     {item.category}
                   </span>
                   <div className="flex items-center space-x-1">
@@ -208,14 +216,14 @@ const Browse = () => {
                     <span className="text-sm text-gray-500">({item.reviewCount})</span>
                   </div>
                 </div>
-                <CardTitle className="text-lg leading-tight group-hover:text-green-600 transition-colors">
+                <CardTitle className="text-lg leading-tight group-hover:text-blue-600 transition-colors">
                   {item.title}
                 </CardTitle>
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <MapPin className="w-4 h-4" />
                   <span>{item.location}</span>
                   {item.verified && (
-                    <span className="text-green-600 font-semibold">✓ Verified</span>
+                    <span className="text-blue-600 font-semibold">✓ Verified</span>
                   )}
                 </div>
               </CardHeader>
@@ -224,7 +232,7 @@ const Browse = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center space-x-1">
-                      <DollarSign className="w-4 h-4 text-green-600" />
+                      <DollarSign className="w-4 h-4 text-blue-600" />
                       <span className="text-xl font-bold text-gray-900">
                         {item.price.toLocaleString()}
                       </span>
@@ -233,7 +241,7 @@ const Browse = () => {
                     <p className="text-sm text-gray-600 mt-1">by {item.renterName}</p>
                   </div>
                   <Link to={`/item/${item.id}`}>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                       View Details
                     </Button>
                   </Link>
