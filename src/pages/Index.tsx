@@ -5,6 +5,7 @@ import { Search, Car, Shirt, Wrench, Laptop, Camera, Star, Users, Shield, Clock,
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import ChatBot from '@/components/ChatBot';
 
 interface Category {
@@ -73,9 +74,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-white shadow-lg border-b sticky top-0 z-30">
+      <nav className="bg-white dark:bg-gray-900 shadow-lg border-b dark:border-gray-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -92,19 +93,20 @@ const Index = () => {
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Easy Lease
                   </h1>
-                  <p className="text-xs text-gray-500 -mt-1">Rental Made Simple</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">Rental Made Simple</p>
                 </div>
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/browse" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Browse</Link>
-              <Link to="/post-item" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">List Your Item</Link>
-              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 font-medium">How it Works</a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium">Support</a>
+              <Link to="/browse" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Browse</Link>
+              <Link to="/post-item" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">List Your Item</Link>
+              <a href="#how-it-works" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">How it Works</a>
+              <a href="#contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</a>
               <div className="flex items-center space-x-4">
+                <ThemeToggle />
                 <Link 
                   to="/login" 
-                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                 >
                   Sign In
                 </Link>
@@ -116,10 +118,11 @@ const Index = () => {
                 </Link>
               </div>
             </div>
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center space-x-3">
+              <ThemeToggle />
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-700 hover:text-blue-600"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                 aria-label="Toggle mobile menu"
                 aria-expanded={mobileMenuOpen}
               >
@@ -131,16 +134,16 @@ const Index = () => {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t shadow-lg">
+          <div className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800 shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/browse" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Browse</Link>
-              <Link to="/post-item" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">List Your Item</Link>
-              <a href="#how-it-works" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">How it Works</a>
-              <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Support</a>
-              <div className="border-t pt-4 mt-4 space-y-2">
+              <Link to="/browse" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Browse</Link>
+              <Link to="/post-item" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
+              <a href="#how-it-works" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">How it Works</a>
+              <a href="#contact" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</a>
+              <div className="border-t dark:border-gray-800 pt-4 mt-4 space-y-2">
                 <Link 
                   to="/login" 
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
+                  className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 >
                   Sign In
                 </Link>
@@ -157,31 +160,31 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 py-20 lg:py-32">
+      <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6">
+            <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6">
               Rent Anything, <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Effortlessly</span>
             </h2>
-            <p className="text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
               Pakistan's most trusted rental marketplace. From cars to wedding dresses, find everything you need without buying.
             </p>
             
             {/* Enhanced Search Bar */}
-            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 border">
+            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border dark:border-gray-700">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
                   <Input 
                     type="text" 
                     placeholder="What do you want to rent?" 
-                    className="h-14 text-lg border-gray-300 focus:border-blue-500"
+                    className="h-14 text-lg border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 dark:bg-gray-700 dark:text-white"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
                 <div>
                   <select 
-                    className="w-full h-14 px-4 border border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:outline-none"
+                    className="w-full h-14 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white"
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
                   >
@@ -209,19 +212,19 @@ const Index = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-3xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">50K+</div>
-                <div className="text-gray-600">Active Listings</div>
+                <div className="text-gray-600 dark:text-gray-400">Active Listings</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">25K+</div>
-                <div className="text-gray-600">Happy Customers</div>
+                <div className="text-gray-600 dark:text-gray-400">Happy Customers</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">15+</div>
-                <div className="text-gray-600">Cities Covered</div>
+                <div className="text-gray-600 dark:text-gray-400">Cities Covered</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">4.8★</div>
-                <div className="text-gray-600">Average Rating</div>
+                <div className="text-gray-600 dark:text-gray-400">Average Rating</div>
               </div>
             </div>
           </div>
@@ -229,27 +232,27 @@ const Index = () => {
       </section>
 
       {/* Featured Categories */}
-      <section id="categories" className="py-20 bg-white">
+      <section id="categories" className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Explore Rental Categories
             </h3>
-            <p className="text-xl text-gray-600">From everyday essentials to special occasions</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">From everyday essentials to special occasions</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
             {categories.map((category, index) => (
               <Link to={`/browse?category=${encodeURIComponent(category.name)}`} key={index}>
-                <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-200">
+                <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-200 dark:hover:border-blue-700 dark:bg-gray-800 dark:border-gray-700">
                   <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-4 p-4 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                      <category.icon className="w-8 h-8 text-blue-600" />
+                    <div className="mx-auto mb-4 p-4 bg-blue-100 dark:bg-blue-900 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                      <category.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <CardTitle className="text-xl text-gray-900">{category.name}</CardTitle>
-                    <CardDescription className="text-gray-600">{category.description}</CardDescription>
+                    <CardTitle className="text-xl text-gray-900 dark:text-white">{category.name}</CardTitle>
+                    <CardDescription className="text-gray-600 dark:text-gray-400">{category.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-sm text-blue-600 font-semibold">{category.itemCount}+ items available</p>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 font-semibold">{category.itemCount}+ items available</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -259,22 +262,22 @@ const Index = () => {
       </section>
 
       {/* Trust & Security Features */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Why Choose Easy Lease?
             </h3>
-            <p className="text-xl text-gray-600">Your safety and satisfaction are our top priorities</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Your safety and satisfaction are our top priorities</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {trustFeatures.map((feature, index) => (
               <div key={index} className="text-center group">
-                <div className="mx-auto mb-6 p-4 bg-white rounded-full shadow-lg group-hover:shadow-xl transition-shadow">
-                  <feature.icon className="w-8 h-8 text-blue-600" />
+                <div className="mx-auto mb-6 p-4 bg-white dark:bg-gray-700 rounded-full shadow-lg group-hover:shadow-xl transition-shadow">
+                  <feature.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h4 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h4>
-                <p className="text-gray-600">{feature.description}</p>
+                <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{feature.title}</h4>
+                <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -282,63 +285,63 @@ const Index = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-white">
+      <section id="how-it-works" className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               How Easy Lease Works
             </h3>
-            <p className="text-xl text-gray-600">Simple, secure, and hassle-free rental process</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Simple, secure, and hassle-free rental process</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Search className="w-8 h-8 text-blue-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 dark:bg-blue-900 rounded-full w-16 h-16 flex items-center justify-center">
+                <Search className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">1. Browse & Search</h4>
-              <p className="text-gray-600">Find the perfect item from thousands of verified listings across Pakistan</p>
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">1. Browse & Search</h4>
+              <p className="text-gray-600 dark:text-gray-400">Find the perfect item from thousands of verified listings across Pakistan</p>
               {/* Connection line */}
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 dark:bg-blue-800 -translate-x-8"></div>
             </div>
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-blue-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 dark:bg-blue-900 rounded-full w-16 h-16 flex items-center justify-center">
+                <Calendar className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">2. Book & Reserve</h4>
-              <p className="text-gray-600">Choose your dates, confirm availability, and secure your rental</p>
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">2. Book & Reserve</h4>
+              <p className="text-gray-600 dark:text-gray-400">Choose your dates, confirm availability, and secure your rental</p>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 dark:bg-blue-800 -translate-x-8"></div>
             </div>
             <div className="text-center relative">
-              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <DollarSign className="w-8 h-8 text-blue-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 dark:bg-blue-900 rounded-full w-16 h-16 flex items-center justify-center">
+                <DollarSign className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">3. Pay Securely</h4>
-              <p className="text-gray-600">Multiple payment options with escrow protection for your peace of mind</p>
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -translate-x-8"></div>
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">3. Pay Securely</h4>
+              <p className="text-gray-600 dark:text-gray-400">Multiple payment options with escrow protection for your peace of mind</p>
+              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 dark:bg-blue-800 -translate-x-8"></div>
             </div>
             <div className="text-center">
-              <div className="mx-auto mb-6 p-4 bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
-                <Star className="w-8 h-8 text-blue-600" />
+              <div className="mx-auto mb-6 p-4 bg-blue-100 dark:bg-blue-900 rounded-full w-16 h-16 flex items-center justify-center">
+                <Star className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">4. Enjoy & Review</h4>
-              <p className="text-gray-600">Use your rental and share your experience to help others</p>
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">4. Enjoy & Review</h4>
+              <p className="text-gray-600 dark:text-gray-400">Use your rental and share your experience to help others</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               What Our Customers Say
             </h3>
-            <p className="text-xl text-gray-600">Real stories from real customers across Pakistan</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Real stories from real customers across Pakistan</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card key={index} className="hover:shadow-lg transition-shadow dark:bg-gray-700 dark:border-gray-600">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
@@ -346,14 +349,14 @@ const Index = () => {
                         <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
                     </div>
-                    <span className="text-sm text-green-600 font-medium">{testimonial.category}</span>
+                    <span className="text-sm text-green-600 dark:text-green-400 font-medium">{testimonial.category}</span>
                   </div>
-                  <p className="text-gray-700 italic mb-4">"{testimonial.text}"</p>
+                  <p className="text-gray-700 dark:text-gray-300 italic mb-4">"{testimonial.text}"</p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <p className="text-gray-900 font-semibold">— {testimonial.name}</p>
-                    <div className="flex items-center text-gray-500 text-sm">
+                    <p className="text-gray-900 dark:text-white font-semibold">— {testimonial.name}</p>
+                    <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
                       <MapPin className="w-4 h-4 mr-1" />
                       {testimonial.location}
                     </div>
@@ -392,19 +395,19 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-4xl font-bold text-gray-900 mb-6">
+          <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
             Need Help? We're Here for You
           </h3>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
             Our customer support team is available 24/7 to assist you with any questions or concerns.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg">
               Chat with Support
             </Button>
-            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg">
+            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-800 px-8 py-4 text-lg">
               Call +92-300-EASYLEASE
             </Button>
           </div>
@@ -412,7 +415,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
+      <footer className="bg-gray-900 dark:bg-gray-950 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
