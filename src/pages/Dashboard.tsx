@@ -5,6 +5,7 @@ import { Calendar, MessageSquare, Star, Plus, Eye, Edit, Trash2, TrendingUp, Dol
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -89,12 +90,12 @@ const Dashboard = () => {
 
   const StatusBadge = ({ status }: { status: string }) => {
     const colors = {
-      confirmed: 'bg-blue-100 text-blue-800',
-      completed: 'bg-green-100 text-green-800',
-      pending: 'bg-yellow-100 text-yellow-800',
-      cancelled: 'bg-red-100 text-red-800',
-      active: 'bg-green-100 text-green-800',
-      paused: 'bg-gray-100 text-gray-800'
+      confirmed: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+      completed: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+      cancelled: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+      active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      paused: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
     };
     
     return (
@@ -105,17 +106,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {user.name}!</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+              <p className="text-gray-600 dark:text-gray-300">Welcome back, {user.name}!</p>
             </div>
             
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Link to="/post-item">
                 <Button className="bg-green-600 hover:bg-green-700">
                   <Plus className="w-4 h-4 mr-2" />
@@ -250,15 +252,15 @@ const Dashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {myBookings.slice(0, 3).map((booking) => (
-                      <div key={booking.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                      <div key={booking.id} className="flex items-center space-x-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         <img 
                           src={booking.image} 
                           alt={booking.title}
                           className="w-12 h-12 rounded-lg object-cover"
                         />
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900">{booking.title}</h4>
-                          <p className="text-sm text-gray-600">{booking.startDate} - {booking.endDate}</p>
+                          <h4 className="font-semibold text-gray-900 dark:text-white">{booking.title}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">{booking.startDate} - {booking.endDate}</p>
                         </div>
                         <StatusBadge status={booking.status} />
                       </div>
@@ -276,18 +278,18 @@ const Dashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {recentMessages.map((message) => (
-                      <div key={message.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <span className="text-gray-600 font-semibold text-sm">
+                      <div key={message.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer">
+                        <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                          <span className="text-gray-600 dark:text-gray-300 font-semibold text-sm">
                             {message.name.charAt(0)}
                           </span>
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <h4 className="font-semibold text-gray-900">{message.name}</h4>
-                            <span className="text-xs text-gray-500">{message.time}</span>
+                            <h4 className="font-semibold text-gray-900 dark:text-white">{message.name}</h4>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{message.time}</span>
                           </div>
-                          <p className="text-sm text-gray-600 truncate">{message.lastMessage}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{message.lastMessage}</p>
                         </div>
                         {message.unread && (
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -310,19 +312,19 @@ const Dashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {myBookings.map((booking) => (
-                    <div key={booking.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
+                    <div key={booking.id} className="flex items-center space-x-4 p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
                       <img 
                         src={booking.image} 
                         alt={booking.title}
                         className="w-16 h-16 rounded-lg object-cover"
                       />
                       <div className="flex-1">
-                        <h3 className="font-bold text-gray-900">{booking.title}</h3>
-                        <p className="text-gray-600">Rented from {booking.renter}</p>
-                        <p className="text-sm text-gray-500">{booking.startDate} - {booking.endDate}</p>
+                        <h3 className="font-bold text-gray-900 dark:text-white">{booking.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-300">Rented from {booking.renter}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{booking.startDate} - {booking.endDate}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-lg">PKR {booking.total.toLocaleString()}</p>
+                        <p className="font-bold text-lg dark:text-white">PKR {booking.total.toLocaleString()}</p>
                         <StatusBadge status={booking.status} />
                       </div>
                       <div className="flex flex-col space-y-2">
@@ -361,23 +363,23 @@ const Dashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {myListings.map((listing) => (
-                    <div key={listing.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
+                    <div key={listing.id} className="flex items-center space-x-4 p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
                       <img 
                         src={listing.image} 
                         alt={listing.title}
                         className="w-16 h-16 rounded-lg object-cover"
                       />
                       <div className="flex-1">
-                        <h3 className="font-bold text-gray-900">{listing.title}</h3>
-                        <p className="text-gray-600">{listing.category}</p>
-                        <p className="text-lg font-semibold">PKR {listing.price.toLocaleString()}/{listing.priceType}</p>
+                        <h3 className="font-bold text-gray-900 dark:text-white">{listing.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-300">{listing.category}</p>
+                        <p className="text-lg font-semibold dark:text-white">PKR {listing.price.toLocaleString()}/{listing.priceType}</p>
                       </div>
                       <div className="text-center">
-                        <div className="flex items-center space-x-1 text-gray-600 mb-1">
+                        <div className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 mb-1">
                           <Eye className="w-4 h-4" />
                           <span className="text-sm">{listing.views}</span>
                         </div>
-                        <p className="text-sm text-gray-500">{listing.bookings} bookings</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{listing.bookings} bookings</p>
                       </div>
                       <StatusBadge status={listing.status} />
                       <div className="flex space-x-2">
@@ -405,18 +407,18 @@ const Dashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {recentMessages.map((message) => (
-                    <div key={message.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                        <span className="text-gray-600 font-bold">
+                    <div key={message.id} className="flex items-center space-x-4 p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                        <span className="text-gray-600 dark:text-gray-300 font-bold">
                           {message.name.charAt(0)}
                         </span>
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-gray-900">{message.name}</h3>
-                          <span className="text-sm text-gray-500">{message.time}</span>
+                          <h3 className="font-semibold text-gray-900 dark:text-white">{message.name}</h3>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">{message.time}</span>
                         </div>
-                        <p className="text-gray-600">{message.lastMessage}</p>
+                        <p className="text-gray-600 dark:text-gray-300">{message.lastMessage}</p>
                       </div>
                       {message.unread && (
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -441,9 +443,9 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
-                  <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No reviews yet</h3>
-                  <p className="text-gray-600">Reviews will appear here after completed rentals</p>
+                  <Star className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No reviews yet</h3>
+                  <p className="text-gray-600 dark:text-gray-300">Reviews will appear here after completed rentals</p>
                 </div>
               </CardContent>
             </Card>
