@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, MapPin, Star, Heart, Calendar, DollarSign, Key } from 'lucide-react';
+import { Search, Filter, MapPin, Star, Heart, Calendar, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -233,9 +233,8 @@ const Browse = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center space-x-1">
-                      <DollarSign className="w-4 h-4 text-blue-600" />
                       <span className="text-xl font-bold text-gray-900">
-                        {item.price.toLocaleString()}
+                        PKR {item.price.toLocaleString()}
                       </span>
                       <span className="text-gray-600">/{item.priceType}</span>
                     </div>

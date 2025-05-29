@@ -108,7 +108,7 @@ const ChatBot = () => {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-40 ${
+        className={`fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-40 ${
           isOpen ? 'scale-0' : 'scale-100'
         }`}
         aria-label="Open customer service chat"
@@ -120,11 +120,11 @@ const ChatBot = () => {
       {isOpen && (
         <div className="fixed bottom-6 right-6 w-80 h-96 bg-white rounded-lg shadow-2xl border z-50 flex flex-col">
           {/* Chat Header */}
-          <div className="bg-green-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+          <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Bot className="w-5 h-5" />
               <div>
-                <h3 className="font-semibold text-sm">PakRent Support</h3>
+                <h3 className="font-semibold text-sm">Easy Lease Support</h3>
                 <p className="text-xs opacity-90">Online now</p>
               </div>
             </div>
@@ -148,7 +148,7 @@ const ChatBot = () => {
                   className={`max-w-[80%] rounded-lg p-3 ${
                     message.isBot
                       ? 'bg-gray-100 text-gray-800'
-                      : 'bg-green-600 text-white'
+                      : 'bg-blue-600 text-white'
                   }`}
                 >
                   <div className="flex items-start space-x-2">
@@ -156,7 +156,7 @@ const ChatBot = () => {
                     <div className="flex-1">
                       <p className="text-sm">{message.text}</p>
                       <p className={`text-xs mt-1 ${
-                        message.isBot ? 'text-gray-500' : 'text-green-100'
+                        message.isBot ? 'text-gray-500' : 'text-blue-100'
                       }`}>
                         {formatTime(message.timestamp)}
                       </p>
@@ -200,7 +200,7 @@ const ChatBot = () => {
                 onClick={handleSendMessage}
                 disabled={!inputMessage.trim() || isTyping}
                 size="sm"
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-blue-600 hover:bg-blue-700"
               >
                 <Send className="w-4 h-4" />
               </Button>
