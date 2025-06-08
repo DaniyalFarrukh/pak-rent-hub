@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Filter, MapPin, Star, Heart, Calendar, Key } from 'lucide-react';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LocationInput } from '@/components/LocationInput';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface RentalItem {
   id: string;
@@ -68,9 +70,8 @@ const sampleItems: RentalItem[] = [
 
 const Browse = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 50000]);
   const [showFilters, setShowFilters] = useState(false);
 
   const categories = ['All', 'Vehicles', 'Wedding Dresses', 'Electronics', 'Tools & Equipment', 'Event Equipment'];
@@ -80,10 +81,22 @@ const Browse = () => {
     console.log('Location filter:', value, placeData);
   };
 
+  // Filter items based on search query, category, and location
+  const filteredItems = sampleItems.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    const matchesLocation = !selectedLocation || 
+                           item.location.toLowerCase().includes(selectedLocation.toLowerCase());
+    
+    return matchesSearch && matchesCategory && matchesLocation;
+  });
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 sticky top-0 z-30">
+      <header className="bg-card shadow-sm border-b sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
@@ -99,42 +112,45 @@ const Browse = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Easy Lease
                 </h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">Rental Made Simple</p>
+                <p className="text-xs text-muted-foreground -mt-1">Rental Made Simple</p>
               </div>
             </Link>
             
             {/* Search Bar */}
             <div className="flex-1 max-w-2xl mx-8">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
                   placeholder="Search for anything..."
-                  className="pl-10 pr-4 h-12 text-lg border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="pl-10 pr-4 h-12 text-lg"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
 
-            <Button 
-              onClick={() => setShowFilters(!showFilters)}
-              variant="outline"
-              className="h-12 px-6 border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              <Filter className="w-5 h-5 mr-2" />
-              Filters
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button 
+                onClick={() => setShowFilters(!showFilters)}
+                variant="outline"
+                className="h-12 px-6"
+              >
+                <Filter className="w-5 h-5 mr-2" />
+                Filters
+              </Button>
+              <ThemeToggle />
+            </div>
           </div>
 
           {/* Filters */}
           {showFilters && (
-            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border dark:border-gray-600">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-4 p-4 bg-muted/50 rounded-lg border">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Category</label>
                   <select 
-                    className="w-full h-10 px-3 border border-gray-300 dark:border-gray-600 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
+                    className="w-full h-10 px-3 border border-input rounded-md focus:border-ring focus:outline-none bg-background text-foreground"
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                   >
@@ -151,22 +167,6 @@ const Browse = () => {
                     onChange={handleLocationFilter}
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price Range (PKR)</label>
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="number" 
-                      placeholder="Min"
-                      className="w-full h-10 px-3 border border-gray-300 dark:border-gray-600 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
-                    />
-                    <span className="text-gray-500 dark:text-gray-400">-</span>
-                    <input 
-                      type="number" 
-                      placeholder="Max"
-                      className="w-full h-10 px-3 border border-gray-300 dark:border-gray-600 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -176,10 +176,10 @@ const Browse = () => {
       {/* Results */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {sampleItems.length} rentals available
+          <h2 className="text-2xl font-bold text-foreground">
+            {filteredItems.length} rentals available
           </h2>
-          <select className="h-10 px-3 border border-gray-300 dark:border-gray-600 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white">
+          <select className="h-10 px-3 border border-input rounded-md focus:border-ring focus:outline-none bg-background text-foreground">
             <option>Sort by: Relevance</option>
             <option>Price: Low to High</option>
             <option>Price: High to Low</option>
@@ -188,9 +188,17 @@ const Browse = () => {
           </select>
         </div>
 
+        {/* No results message */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-muted-foreground text-lg mb-2">No rentals found</div>
+            <p className="text-muted-foreground">Try adjusting your search or filters</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {sampleItems.map((item) => (
-            <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-0 shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+          {filteredItems.map((item) => (
+            <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
               <div className="relative">
                 <img 
                   src={item.image} 
@@ -202,30 +210,30 @@ const Browse = () => {
                     Featured
                   </span>
                 )}
-                <button className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full transition-colors">
-                  <Heart className="w-4 h-4 text-gray-600 hover:text-red-500" />
+                <button className="absolute top-3 right-3 p-2 bg-background/80 hover:bg-background rounded-full transition-colors">
+                  <Heart className="w-4 h-4 text-muted-foreground hover:text-red-500" />
                 </button>
               </div>
               
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
+                  <span className="text-xs text-blue-600 font-semibold bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
                     {item.category}
                   </span>
                   <div className="flex items-center space-x-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm font-medium dark:text-white">{item.rating}</span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">({item.reviewCount})</span>
+                    <span className="text-sm font-medium text-foreground">{item.rating}</span>
+                    <span className="text-sm text-muted-foreground">({item.reviewCount})</span>
                   </div>
                 </div>
-                <CardTitle className="text-lg leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors dark:text-white">
+                <CardTitle className="text-lg leading-tight group-hover:text-blue-600 transition-colors">
                   {item.title}
                 </CardTitle>
-                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <MapPin className="w-4 h-4" />
                   <span>{item.location}</span>
                   {item.verified && (
-                    <span className="text-blue-600 dark:text-blue-400 font-semibold">✓ Verified</span>
+                    <span className="text-blue-600 font-semibold">✓ Verified</span>
                   )}
                 </div>
               </CardHeader>
@@ -234,15 +242,15 @@ const Browse = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center space-x-1">
-                      <span className="text-xl font-bold text-gray-900 dark:text-white">
+                      <span className="text-xl font-bold text-foreground">
                         PKR {item.price.toLocaleString()}
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400">/{item.priceType}</span>
+                      <span className="text-muted-foreground">/{item.priceType}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">by {item.renterName}</p>
+                    <p className="text-sm text-muted-foreground mt-1">by {item.renterName}</p>
                   </div>
                   <Link to={`/item/${item.id}`}>
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                       View Details
                     </Button>
                   </Link>
@@ -253,11 +261,13 @@ const Browse = () => {
         </div>
 
         {/* Load More */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg" className="px-8 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
-            Load More Results
-          </Button>
-        </div>
+        {filteredItems.length > 0 && (
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg" className="px-8">
+              Load More Results
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );
