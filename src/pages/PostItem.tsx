@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Plus, Calendar, MapPin, DollarSign } from 'lucide-react';
+import { ArrowLeft, Upload, X, Plus, Calendar, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LocationInput } from '@/components/LocationInput';
 
 const PostItem = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const PostItem = () => {
     price: '',
     priceType: 'day',
     location: '',
+    locationData: null as google.maps.places.PlaceResult | null,
     images: [] as string[],
     availableDates: [] as Date[],
     rules: [''],
@@ -40,6 +42,14 @@ const PostItem = () => {
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleLocationChange = (value: string, placeData?: google.maps.places.PlaceResult) => {
+    setFormData(prev => ({
+      ...prev,
+      location: value,
+      locationData: placeData || null
     }));
   };
 
@@ -221,25 +231,17 @@ const PostItem = () => {
                   />
                 </div>
 
-                <div>
-                  <Label htmlFor="location" className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                    Location *
-                  </Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
-                    <Input
-                      id="location"
-                      placeholder="e.g., Lahore, Punjab"
-                      value={formData.location}
-                      onChange={(e) => handleInputChange('location', e.target.value)}
-                      className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    />
-                  </div>
-                </div>
+                <LocationInput
+                  label="Location"
+                  placeholder="e.g., Lahore, Punjab"
+                  value={formData.location}
+                  onChange={handleLocationChange}
+                  required
+                />
               </>
             )}
 
-            {/* Step 2: Photos & Pricing */}
+            {/* Steps 2-4: Keep existing code for other steps */}
             {currentStep === 2 && (
               <>
                 <div>
@@ -459,7 +461,6 @@ const PostItem = () => {
                         <span className="text-lg font-normal text-gray-600 dark:text-gray-400">/{formData.priceType}</span>
                       </p>
                       <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 mb-4">
-                        <MapPin className="w-4 h-4" />
                         <span>{formData.location}</span>
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">{formData.description}</p>
