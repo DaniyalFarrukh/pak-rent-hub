@@ -101,15 +101,15 @@ const Browse = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
-                  <Key className="w-5 h-5 text-white transform -rotate-12" />
+                <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
+                  <Key className="w-5 h-5 text-primary-foreground transform -rotate-12" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">R</span>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full flex items-center justify-center">
+                  <span className="text-accent-foreground text-xs font-bold">R</span>
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                   Easy Lease
                 </h1>
                 <p className="text-xs text-muted-foreground -mt-1">Rental Made Simple</p>
@@ -206,18 +206,18 @@ const Browse = () => {
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 {item.featured && (
-                  <span className="absolute top-3 left-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-semibold">
                     Featured
                   </span>
                 )}
                 <button className="absolute top-3 right-3 p-2 bg-background/80 hover:bg-background rounded-full transition-colors">
-                  <Heart className="w-4 h-4 text-muted-foreground hover:text-red-500" />
+                  <Heart className="w-4 h-4 text-muted-foreground hover:text-destructive" />
                 </button>
               </div>
               
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-blue-600 font-semibold bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
+                  <span className="text-xs text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full">
                     {item.category}
                   </span>
                   <div className="flex items-center space-x-1">
@@ -226,14 +226,14 @@ const Browse = () => {
                     <span className="text-sm text-muted-foreground">({item.reviewCount})</span>
                   </div>
                 </div>
-                <CardTitle className="text-lg leading-tight group-hover:text-blue-600 transition-colors">
+                <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors">
                   {item.title}
                 </CardTitle>
                 <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <MapPin className="w-4 h-4" />
                   <span>{item.location}</span>
                   {item.verified && (
-                    <span className="text-blue-600 font-semibold">✓ Verified</span>
+                    <span className="text-primary font-semibold">✓ Verified</span>
                   )}
                 </div>
               </CardHeader>
@@ -250,7 +250,7 @@ const Browse = () => {
                     <p className="text-sm text-muted-foreground mt-1">by {item.renterName}</p>
                   </div>
                   <Link to={`/item/${item.id}`}>
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                       View Details
                     </Button>
                   </Link>
