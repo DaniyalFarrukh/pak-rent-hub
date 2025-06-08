@@ -128,7 +128,10 @@ const Verification = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-3">
-                    <verificationSteps[currentStep - 1].icon className="w-6 h-6 text-blue-600" />
+                    {(() => {
+                      const StepIcon = verificationSteps[currentStep - 1].icon;
+                      return <StepIcon className="w-6 h-6 text-blue-600" />;
+                    })()}
                     <span>Step {currentStep}: {verificationSteps[currentStep - 1].title}</span>
                   </CardTitle>
                   <CardDescription>
