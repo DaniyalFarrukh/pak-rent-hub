@@ -33,6 +33,18 @@ declare global {
         title?: string;
       }
 
+      class InfoWindow {
+        constructor(opts?: InfoWindowOptions);
+        open(map?: Map, anchor?: Marker): void;
+        close(): void;
+        setContent(content: string | Element): void;
+      }
+
+      interface InfoWindowOptions {
+        content?: string | Element;
+        position?: LatLngLiteral;
+      }
+
       namespace places {
         class Autocomplete {
           constructor(inputField: HTMLInputElement, opts?: AutocompleteOptions);
