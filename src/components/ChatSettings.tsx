@@ -11,9 +11,9 @@ interface ChatSettingsProps {
 
 const ChatSettings: React.FC<ChatSettingsProps> = ({ apiKey, onApiKeyChange, onSave }) => {
   return (
-    <div className="p-4 border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+    <div className="p-4 border-b bg-muted/50 border-border">
       <div className="space-y-2">
-        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
+        <label className="text-xs font-medium text-foreground">
           OpenAI API Key:
         </label>
         <Input
@@ -26,7 +26,7 @@ const ChatSettings: React.FC<ChatSettingsProps> = ({ apiKey, onApiKeyChange, onS
         <Button onClick={onSave} size="sm" className="w-full text-xs">
           Save Key
         </Button>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
+        <p className="text-xs text-muted-foreground">
           Your API key is stored locally and never shared.
         </p>
       </div>

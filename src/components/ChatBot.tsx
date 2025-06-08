@@ -164,7 +164,7 @@ Be helpful, friendly, and informative. Provide specific information about Easy L
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-40 ${
+        className={`fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-4 shadow-lg transition-all duration-300 z-40 ${
           isOpen ? 'scale-0' : 'scale-100'
         }`}
         aria-label="Open AI chat assistant"
@@ -174,7 +174,7 @@ Be helpful, friendly, and informative. Provide specific information about Easy L
 
       {/* Chat Interface */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 h-96 bg-white rounded-lg shadow-2xl border z-50 flex flex-col dark:bg-gray-800 dark:border-gray-700">
+        <div className="fixed bottom-6 right-6 w-80 h-96 bg-background rounded-lg shadow-2xl border border-border z-50 flex flex-col">
           <ChatBotHeader 
             onClose={() => setIsOpen(false)}
             onSettingsToggle={() => setShowSettings(!showSettings)}

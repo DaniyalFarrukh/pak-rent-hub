@@ -27,17 +27,15 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <div
         className={`max-w-[80%] rounded-lg p-3 ${
           message.isBot
-            ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-            : 'bg-blue-600 text-white'
+            ? 'bg-muted text-muted-foreground'
+            : 'bg-primary text-primary-foreground'
         }`}
       >
         <div className="flex items-start space-x-2">
           {message.isBot && <Bot className="w-4 h-4 mt-0.5 flex-shrink-0" />}
           <div className="flex-1">
             <p className="text-sm">{message.text}</p>
-            <p className={`text-xs mt-1 ${
-              message.isBot ? 'text-gray-500 dark:text-gray-400' : 'text-blue-100'
-            }`}>
+            <p className={`text-xs mt-1 opacity-70`}>
               {formatTime(message.timestamp)}
             </p>
           </div>

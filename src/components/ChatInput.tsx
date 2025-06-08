@@ -20,7 +20,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   disabled 
 }) => {
   return (
-    <div className="border-t p-4 dark:border-gray-600">
+    <div className="border-t border-border p-4">
       <div className="flex space-x-2">
         <Input
           value={value}
@@ -34,12 +34,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onClick={onSend}
           disabled={!value.trim() || disabled}
           size="sm"
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-primary hover:bg-primary/90"
         >
           <Send className="w-4 h-4" />
         </Button>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+      <p className="text-xs text-muted-foreground mt-2 text-center">
         AI-powered support • Usually replies instantly
       </p>
     </div>
