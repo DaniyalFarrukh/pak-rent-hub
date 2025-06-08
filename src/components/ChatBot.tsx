@@ -1,9 +1,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, User, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { MessageCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ChatBotHeader from './ChatBotHeader';
+import ChatMessage from './ChatMessage';
+import ChatInput from './ChatInput';
+import ChatSettings from './ChatSettings';
+import TypingIndicator from './TypingIndicator';
 
 interface Message {
   id: string;
@@ -89,7 +92,7 @@ Be helpful, friendly, and informative. Provide specific information about Easy L
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4.1-2025-04-14',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userMessage }
@@ -156,14 +159,6 @@ Be helpful, friendly, and informative. Provide specific information about Easy L
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
-    });
-  };
-
   return (
     <>
       {/* Floating Chat Button */}
@@ -180,129 +175,36 @@ Be helpful, friendly, and informative. Provide specific information about Easy L
       {/* Chat Interface */}
       {isOpen && (
         <div className="fixed bottom-6 right-6 w-80 h-96 bg-white rounded-lg shadow-2xl border z-50 flex flex-col dark:bg-gray-800 dark:border-gray-700">
-          {/* Chat Header */}
-          <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Bot className="w-5 h-5" />
-              <div>
-                <h3 className="font-semibold text-sm">AI Assistant</h3>
-                <p className="text-xs opacity-90">Powered by OpenAI</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setShowSettings(!showSettings)}
-                className="text-white hover:text-gray-200 transition-colors"
-                aria-label="Settings"
-              >
-                <Settings className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:text-gray-200 transition-colors"
-                aria-label="Close chat"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
+          <ChatBotHeader 
+            onClose={() => setIsOpen(false)}
+            onSettingsToggle={() => setShowSettings(!showSettings)}
+          />
 
-          {/* Settings Panel */}
           {showSettings && (
-            <div className="p-4 border-b bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                  OpenAI API Key:
-                </label>
-                <Input
-                  type="password"
-                  placeholder="sk-..."
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  className="text-xs"
-                />
-                <Button onClick={saveApiKey} size="sm" className="w-full text-xs">
-                  Save Key
-                </Button>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Your API key is stored locally and never shared.
-                </p>
-              </div>
-            </div>
+            <ChatSettings 
+              apiKey={apiKey}
+              onApiKeyChange={setApiKey}
+              onSave={saveApiKey}
+            />
           )}
 
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.isBot
-                      ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-                      : 'bg-blue-600 text-white'
-                  }`}
-                >
-                  <div className="flex items-start space-x-2">
-                    {message.isBot && <Bot className="w-4 h-4 mt-0.5 flex-shrink-0" />}
-                    <div className="flex-1">
-                      <p className="text-sm">{message.text}</p>
-                      <p className={`text-xs mt-1 ${
-                        message.isBot ? 'text-gray-500 dark:text-gray-400' : 'text-blue-100'
-                      }`}>
-                        {formatTime(message.timestamp)}
-                      </p>
-                    </div>
-                    {!message.isBot && <User className="w-4 h-4 mt-0.5 flex-shrink-0" />}
-                  </div>
-                </div>
-              </div>
+              <ChatMessage key={message.id} message={message} />
             ))}
             
-            {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-3 max-w-[80%] dark:bg-gray-700">
-                  <div className="flex items-center space-x-2">
-                    <Bot className="w-4 h-4" />
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            {isTyping && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          <div className="border-t p-4 dark:border-gray-600">
-            <div className="flex space-x-2">
-              <Input
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask me anything about Easy Lease..."
-                className="flex-1"
-                disabled={isTyping}
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputMessage.trim() || isTyping}
-                size="sm"
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-              AI-powered support • Usually replies instantly
-            </p>
-          </div>
+          <ChatInput 
+            value={inputMessage}
+            onChange={setInputMessage}
+            onSend={handleSendMessage}
+            onKeyPress={handleKeyPress}
+            disabled={isTyping}
+          />
         </div>
       )}
     </>
