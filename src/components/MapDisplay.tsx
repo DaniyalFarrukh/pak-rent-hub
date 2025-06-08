@@ -48,13 +48,15 @@ export const MapDisplay = ({
               marker.title
             );
             
-            if (marker.info) {
+            if (marker.info && typeof google !== 'undefined') {
               const infoWindow = new google.maps.InfoWindow({
                 content: marker.info
               });
               
               mapMarker.addListener('click', () => {
-                infoWindow.open(mapInstanceRef.current, mapMarker);
+                if (mapInstanceRef.current) {
+                  infoWindow.open(mapInstanceRef.current, mapMarker);
+                }
               });
             }
             

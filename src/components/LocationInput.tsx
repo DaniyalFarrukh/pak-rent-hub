@@ -60,7 +60,7 @@ export const LocationInput = ({
     initAutocomplete();
 
     return () => {
-      if (autocompleteRef.current) {
+      if (autocompleteRef.current && typeof google !== 'undefined') {
         google.maps.event.clearInstanceListeners(autocompleteRef.current);
       }
     };
