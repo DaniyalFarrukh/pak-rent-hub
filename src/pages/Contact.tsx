@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Clock, Send, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -163,8 +164,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">Message</label>
-                    <textarea
-                      className="w-full h-32 px-3 py-2 border border-input rounded-md focus:border-ring focus:outline-none bg-background text-foreground"
+                    <Textarea
+                      className="h-32"
                       value={formData.message}
                       onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                       placeholder="Tell us how we can help you..."
