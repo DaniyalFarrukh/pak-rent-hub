@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Key, Shield, CheckCircle, FileText, Phone, CreditCard, Clock } from 'lucide-react';
+import { Key, Shield, CheckCircle, FileText, Phone, CreditCard, Clock, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ const Verification = () => {
     address: '',
     bankAccount: ''
   });
+  const [cnicFiles, setCnicFiles] = useState<File[]>([]);
 
   const verificationSteps = [
     {
@@ -48,9 +49,22 @@ const Verification = () => {
     "Faster payment processing"
   ];
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newFiles = Array.from(files);
+      setCnicFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setCnicFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Verification form submitted:', formData);
+    console.log('CNIC files:', cnicFiles);
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
@@ -154,6 +168,51 @@ const Verification = () => {
                             required
                           />
                         </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            Upload CNIC Documents
+                          </label>
+                          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-blue-600 transition-colors">
+                            <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                            <p className="text-sm text-muted-foreground mb-2">
+                              Upload front and back of your CNIC
+                            </p>
+                            <input
+                              type="file"
+                              accept="image/*,.pdf"
+                              multiple
+                              onChange={handleFileUpload}
+                              className="hidden"
+                              id="cnic-upload"
+                            />
+                            <label htmlFor="cnic-upload">
+                              <Button type="button" variant="outline" className="cursor-pointer" asChild>
+                                <span>Choose Files</span>
+                              </Button>
+                            </label>
+                          </div>
+                          
+                          {cnicFiles.length > 0 && (
+                            <div className="mt-4 space-y-2">
+                              <p className="text-sm font-medium text-foreground">Uploaded Files:</p>
+                              {cnicFiles.map((file, index) => (
+                                <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                                  <span className="text-sm text-foreground">{file.name}</span>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => removeFile(index)}
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
                             Full Address
