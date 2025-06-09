@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import Browse from "./pages/Browse";
 import ItemDetail from "./pages/ItemDetail";
 import Dashboard from "./pages/Dashboard";
+import CustomerDashboard from "./pages/CustomerDashboard";
 import PostItem from "./pages/PostItem";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
@@ -38,6 +39,8 @@ const App = () => (
             <Route path="/browse" element={<Browse />} />
             <Route path="/item/:id" element={<ItemDetail />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+            <Route path="/my-account" element={<CustomerDashboard />} />
             <Route path="/post-item" element={<PostItem />} />
             <Route path="/list-item" element={<PostItem />} />
             <Route path="/contact" element={<Contact />} />
