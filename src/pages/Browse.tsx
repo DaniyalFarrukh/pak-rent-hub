@@ -73,12 +73,25 @@ const Browse = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
 
   const categories = ['All', 'Vehicles', 'Wedding Dresses', 'Electronics', 'Tools & Equipment', 'Event Equipment'];
 
   const handleLocationFilter = (value: string, placeData?: google.maps.places.PlaceResult) => {
     setSelectedLocation(value);
     console.log('Location filter:', value, placeData);
+  };
+
+  const handleLike = (itemId: string) => {
+    setLikedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
   };
 
   // Filter items based on search query, category, and location
@@ -210,8 +223,21 @@ const Browse = () => {
                     Featured
                   </span>
                 )}
-                <button className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full transition-colors">
-                  <Heart className="w-4 h-4 text-gray-600 dark:text-gray-400 hover:text-red-500" />
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleLike(item.id);
+                  }}
+                  className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full transition-all duration-200 hover:scale-110"
+                >
+                  <Heart 
+                    className={`w-4 h-4 transition-colors duration-200 ${
+                      likedItems.has(item.id) 
+                        ? 'text-red-500 fill-red-500' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
+                    }`} 
+                  />
                 </button>
               </div>
               
