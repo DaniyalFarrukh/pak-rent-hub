@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Key, Shield, CheckCircle, FileText, Phone, CreditCard, Clock, Upload, X } from 'lucide-react';
+import { Key, Shield, CheckCircle, FileText, Phone, CreditCard, Clock, Upload, X, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useToast } from '@/components/ui/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Verification = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -16,6 +17,7 @@ const Verification = () => {
     bankAccount: ''
   });
   const [cnicFiles, setCnicFiles] = useState<File[]>([]);
+  const [validationStatus, setValidationStatus] = useState<{ [key: number]: 'pending' | 'validating' | 'valid' | 'invalid' }>({});
   const { toast } = useToast();
 
   const verificationSteps = [
@@ -74,13 +76,86 @@ const Verification = () => {
     return allowedTypes.includes(file.type);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const validateCNICImage = async (file: File, index: number): Promise<boolean> => {
+    return new Promise((resolve) => {
+      setValidationStatus(prev => ({ ...prev, [index]: 'validating' }));
+      
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        
+        // Get image data for basic validation
+        const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // Basic checks for CNIC-like characteristics
+        const aspectRatio = img.width / img.height;
+        const isCardLikeAspectRatio = aspectRatio > 1.4 && aspectRatio < 1.8; // CNIC is roughly 1.6:1
+        const hasMinimumSize = img.width >= 300 && img.height >= 180; // Minimum reasonable size
+        
+        // Check if image has sufficient detail (not too dark/bright/blurry)
+        let totalBrightness = 0;
+        let pixelCount = 0;
+        
+        if (imageData) {
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            const r = imageData.data[i];
+            const g = imageData.data[i + 1];
+            const b = imageData.data[i + 2];
+            totalBrightness += (r + g + b) / 3;
+            pixelCount++;
+          }
+        }
+        
+        const avgBrightness = totalBrightness / pixelCount;
+        const hasGoodBrightness = avgBrightness > 30 && avgBrightness < 225; // Not too dark or too bright
+        
+        const isValid = isCardLikeAspectRatio && hasMinimumSize && hasGoodBrightness;
+        
+        if (isValid) {
+          setValidationStatus(prev => ({ ...prev, [index]: 'valid' }));
+          toast({
+            title: "CNIC image validated",
+            description: `${index === 0 ? 'Front' : 'Back'} side appears to be a valid CNIC document.`,
+          });
+        } else {
+          setValidationStatus(prev => ({ ...prev, [index]: 'invalid' }));
+          toast({
+            title: "Invalid CNIC image",
+            description: `This doesn't appear to be a valid CNIC document. Please upload a clear photo of your ${index === 0 ? 'CNIC front' : 'CNIC back'}.`,
+            variant: "destructive"
+          });
+        }
+        
+        resolve(isValid);
+      };
+      
+      img.onerror = () => {
+        setValidationStatus(prev => ({ ...prev, [index]: 'invalid' }));
+        toast({
+          title: "Image validation failed",
+          description: "Unable to process the uploaded image. Please try again.",
+          variant: "destructive"
+        });
+        resolve(false);
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const newFiles = Array.from(files);
       const validFiles: File[] = [];
       let hasInvalidFiles = false;
 
+      // First check file types
       newFiles.forEach(file => {
         if (validateFileType(file)) {
           validFiles.push(file);
@@ -98,17 +173,25 @@ const Verification = () => {
       }
 
       if (validFiles.length > 0) {
-        setCnicFiles(prev => {
-          const combined = [...prev, ...validFiles];
-          if (combined.length > 2) {
-            toast({
-              title: "Too many files",
-              description: "Please upload only 2 images: front and back of your CNIC.",
-              variant: "destructive"
-            });
-            return combined.slice(0, 2);
-          }
-          return combined;
+        // Check if adding these files would exceed the limit
+        const totalFiles = cnicFiles.length + validFiles.length;
+        if (totalFiles > 2) {
+          toast({
+            title: "Too many files",
+            description: "Please upload only 2 images: front and back of your CNIC.",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        // Add files and validate them
+        const startIndex = cnicFiles.length;
+        setCnicFiles(prev => [...prev, ...validFiles]);
+        
+        // Validate each uploaded CNIC image
+        validFiles.forEach(async (file, fileIndex) => {
+          const actualIndex = startIndex + fileIndex;
+          await validateCNICImage(file, actualIndex);
         });
       }
     }
@@ -116,6 +199,21 @@ const Verification = () => {
 
   const removeFile = (index: number) => {
     setCnicFiles(prev => prev.filter((_, i) => i !== index));
+    setValidationStatus(prev => {
+      const newStatus = { ...prev };
+      delete newStatus[index];
+      // Reindex remaining files
+      const reindexed: typeof newStatus = {};
+      Object.keys(newStatus).forEach(key => {
+        const oldIndex = parseInt(key);
+        if (oldIndex > index) {
+          reindexed[oldIndex - 1] = newStatus[oldIndex];
+        } else {
+          reindexed[oldIndex] = newStatus[oldIndex];
+        }
+      });
+      return reindexed;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -130,10 +228,26 @@ const Verification = () => {
         });
         return;
       }
+
+      // Check if all uploaded files are validated as valid CNICs
+      const invalidFiles = cnicFiles.some((_, index) => 
+        validationStatus[index] === 'invalid' || validationStatus[index] === 'validating'
+      );
+
+      if (invalidFiles) {
+        toast({
+          title: "CNIC validation incomplete",
+          description: "Please ensure all uploaded images are valid CNIC documents before proceeding.",
+          variant: "destructive"
+        });
+        return;
+      }
     }
 
     console.log('Verification form submitted:', formData);
     console.log('CNIC files:', cnicFiles);
+    console.log('Validation status:', validationStatus);
+    
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
@@ -243,6 +357,15 @@ const Verification = () => {
                           <label className="block text-sm font-medium text-foreground mb-2">
                             Upload CNIC Documents <span className="text-red-500">*</span>
                           </label>
+                          
+                          <Alert className="mb-4">
+                            <AlertTriangle className="h-4 w-4" />
+                            <AlertDescription>
+                              <strong>Important:</strong> Please upload clear, high-quality photos of your actual CNIC card. 
+                              The system will automatically verify that the uploaded images contain valid CNIC documents.
+                            </AlertDescription>
+                          </Alert>
+                          
                           <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-blue-600 transition-colors">
                             <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                             <p className="text-sm text-muted-foreground mb-2">
@@ -274,13 +397,29 @@ const Verification = () => {
                               {cnicFiles.map((file, index) => (
                                 <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                                   <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                                      <FileText className="w-5 h-5 text-blue-600" />
+                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                      validationStatus[index] === 'valid' ? 'bg-green-100 dark:bg-green-900' :
+                                      validationStatus[index] === 'invalid' ? 'bg-red-100 dark:bg-red-900' :
+                                      validationStatus[index] === 'validating' ? 'bg-yellow-100 dark:bg-yellow-900' :
+                                      'bg-blue-100 dark:bg-blue-900'
+                                    }`}>
+                                      {validationStatus[index] === 'valid' ? (
+                                        <CheckCircle className="w-5 h-5 text-green-600" />
+                                      ) : validationStatus[index] === 'invalid' ? (
+                                        <X className="w-5 h-5 text-red-600" />
+                                      ) : validationStatus[index] === 'validating' ? (
+                                        <Clock className="w-5 h-5 text-yellow-600" />
+                                      ) : (
+                                        <FileText className="w-5 h-5 text-blue-600" />
+                                      )}
                                     </div>
                                     <div>
                                       <span className="text-sm font-medium text-foreground">{file.name}</span>
                                       <p className="text-xs text-muted-foreground">
                                         {index === 0 ? 'CNIC Front' : 'CNIC Back'} - {(file.size / 1024 / 1024).toFixed(2)} MB
+                                        {validationStatus[index] === 'validating' && ' - Validating...'}
+                                        {validationStatus[index] === 'valid' && ' - ✓ Verified as CNIC'}
+                                        {validationStatus[index] === 'invalid' && ' - ✗ Not a valid CNIC'}
                                       </p>
                                     </div>
                                   </div>
