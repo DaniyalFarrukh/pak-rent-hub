@@ -46,8 +46,10 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/renter-guide" element={<RenterGuide />} />
             <Route path="/verification" element={<Verification />} />
+            <Route path="/get-verified" element={<Verification />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/safety" element={<Safety />} />
+            <Route path="/safety-centre" element={<Safety />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
