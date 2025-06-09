@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Key, Shield, CheckCircle, FileText, Phone, CreditCard, Clock, Upload, X } from 'lucide-react';
@@ -48,6 +47,25 @@ const Verification = () => {
     "Insurance coverage for your items",
     "Faster payment processing"
   ];
+
+  const formatCNIC = (value: string) => {
+    // Remove all non-digit characters
+    const digits = value.replace(/\D/g, '');
+    
+    // Apply CNIC format: XXXXX-XXXXXXX-X
+    if (digits.length <= 5) {
+      return digits;
+    } else if (digits.length <= 12) {
+      return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+    } else {
+      return `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12, 13)}`;
+    }
+  };
+
+  const handleCNICChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCNIC(e.target.value);
+    setFormData(prev => ({...prev, cnic: formatted}));
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -164,7 +182,8 @@ const Verification = () => {
                             type="text"
                             placeholder="12345-6789012-3"
                             value={formData.cnic}
-                            onChange={(e) => setFormData(prev => ({...prev, cnic: e.target.value}))}
+                            onChange={handleCNICChange}
+                            maxLength={15}
                             required
                           />
                         </div>
