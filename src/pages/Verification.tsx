@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useToast } from '@/components/ui/use-toast';
 
 const Verification = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -15,6 +16,7 @@ const Verification = () => {
     bankAccount: ''
   });
   const [cnicFiles, setCnicFiles] = useState<File[]>([]);
+  const { toast } = useToast();
 
   const verificationSteps = [
     {
@@ -67,11 +69,48 @@ const Verification = () => {
     setFormData(prev => ({...prev, cnic: formatted}));
   };
 
+  const validateFileType = (file: File): boolean => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    return allowedTypes.includes(file.type);
+  };
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const newFiles = Array.from(files);
-      setCnicFiles(prev => [...prev, ...newFiles]);
+      const validFiles: File[] = [];
+      let hasInvalidFiles = false;
+
+      newFiles.forEach(file => {
+        if (validateFileType(file)) {
+          validFiles.push(file);
+        } else {
+          hasInvalidFiles = true;
+        }
+      });
+
+      if (hasInvalidFiles) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload only image files (JPG, PNG, WebP) of your CNIC front and back.",
+          variant: "destructive"
+        });
+      }
+
+      if (validFiles.length > 0) {
+        setCnicFiles(prev => {
+          const combined = [...prev, ...validFiles];
+          if (combined.length > 2) {
+            toast({
+              title: "Too many files",
+              description: "Please upload only 2 images: front and back of your CNIC.",
+              variant: "destructive"
+            });
+            return combined.slice(0, 2);
+          }
+          return combined;
+        });
+      }
     }
   };
 
@@ -81,6 +120,18 @@ const Verification = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (currentStep === 1) {
+      if (cnicFiles.length < 2) {
+        toast({
+          title: "Missing CNIC documents",
+          description: "Please upload both front and back images of your CNIC.",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
     console.log('Verification form submitted:', formData);
     console.log('CNIC files:', cnicFiles);
     if (currentStep < 4) {
@@ -190,16 +241,19 @@ const Verification = () => {
                         
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
-                            Upload CNIC Documents
+                            Upload CNIC Documents <span className="text-red-500">*</span>
                           </label>
                           <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-blue-600 transition-colors">
                             <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                             <p className="text-sm text-muted-foreground mb-2">
-                              Upload front and back of your CNIC
+                              <strong>Required:</strong> Upload clear images of both front and back of your CNIC
+                            </p>
+                            <p className="text-xs text-muted-foreground mb-4">
+                              Accepted formats: JPG, PNG, WebP (Max 2 files)
                             </p>
                             <input
                               type="file"
-                              accept="image/*,.pdf"
+                              accept="image/jpeg,image/jpg,image/png,image/webp"
                               multiple
                               onChange={handleFileUpload}
                               className="hidden"
@@ -207,17 +261,29 @@ const Verification = () => {
                             />
                             <label htmlFor="cnic-upload">
                               <Button type="button" variant="outline" className="cursor-pointer" asChild>
-                                <span>Choose Files</span>
+                                <span>Choose CNIC Images</span>
                               </Button>
                             </label>
                           </div>
                           
                           {cnicFiles.length > 0 && (
                             <div className="mt-4 space-y-2">
-                              <p className="text-sm font-medium text-foreground">Uploaded Files:</p>
+                              <p className="text-sm font-medium text-foreground">
+                                Uploaded Files ({cnicFiles.length}/2):
+                              </p>
                               {cnicFiles.map((file, index) => (
-                                <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
-                                  <span className="text-sm text-foreground">{file.name}</span>
+                                <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                                  <div className="flex items-center space-x-3">
+                                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                                      <FileText className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <div>
+                                      <span className="text-sm font-medium text-foreground">{file.name}</span>
+                                      <p className="text-xs text-muted-foreground">
+                                        {index === 0 ? 'CNIC Front' : 'CNIC Back'} - {(file.size / 1024 / 1024).toFixed(2)} MB
+                                      </p>
+                                    </div>
+                                  </div>
                                   <Button
                                     type="button"
                                     variant="ghost"
@@ -228,6 +294,11 @@ const Verification = () => {
                                   </Button>
                                 </div>
                               ))}
+                              {cnicFiles.length < 2 && (
+                                <p className="text-sm text-amber-600">
+                                  Please upload {2 - cnicFiles.length} more image{2 - cnicFiles.length > 1 ? 's' : ''} (CNIC {cnicFiles.length === 0 ? 'front and back' : 'back'})
+                                </p>
+                              )}
                             </div>
                           )}
                         </div>
