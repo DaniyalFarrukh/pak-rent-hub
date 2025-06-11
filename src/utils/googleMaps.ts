@@ -1,8 +1,7 @@
-
 import { Loader } from '@googlemaps/js-api-loader';
 
 // Note: In production, store this API key in Supabase secrets
-const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBOti4mM-6x9WDnZIjIeyb';  // Replace this with your actual Google Maps API key
 
 let googleMapsLoader: Loader | null = null;
 
