@@ -29,34 +29,34 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light" storageKey="easylease-theme">
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/item/:id" element={<ItemDetail />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-            <Route path="/my-account" element={<CustomerDashboard />} />
-            <Route path="/post-item" element={<PostItem />} />
-            <Route path="/list-item" element={<PostItem />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/renter-guide" element={<RenterGuide />} />
-            <Route path="/verification" element={<Verification />} />
-            <Route path="/get-verified" element={<Verification />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/safety" element={<Safety />} />
-            <Route path="/safety-centre" element={<Safety />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/item/:id" element={<ItemDetail />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+              <Route path="/my-account" element={<CustomerDashboard />} />
+              <Route path="/post-item" element={<PostItem />} />
+              <Route path="/list-item" element={<PostItem />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/renter-guide" element={<RenterGuide />} />
+              <Route path="/verification" element={<Verification />} />
+              <Route path="/get-verified" element={<Verification />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/safety" element={<Safety />} />
+              <Route path="/safety-centre" element={<Safety />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>

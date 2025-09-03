@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft, Award, DollarSign, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,10 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useAuth } from '@/hooks/useAuth';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userType, setUserType] = useState<'customer' | 'renter'>('customer');
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,13 +26,44 @@ const Signup = () => {
     agreeToMarketing: false
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { signUp, signInWithOAuth, user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
       return;
     }
-    console.log('Signup form submitted:', { ...formData, userType });
+
+    if (!formData.agreeToTerms) {
+      return;
+    }
+
+    setLoading(true);
+    const displayName = `${formData.firstName} ${formData.lastName}`.trim();
+    
+    const { error } = await signUp(formData.email, formData.password, {
+      display_name: displayName
+    });
+    
+    if (!error) {
+      // User will get email confirmation
+    }
+    setLoading(false);
+  };
+
+  const handleOAuthSignup = async (provider: 'google' | 'facebook') => {
+    setLoading(true);
+    await signInWithOAuth(provider);
+    setLoading(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,10 +362,10 @@ const Signup = () => {
             {/* Signup Button */}
             <Button 
               type="submit" 
-              className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-colors"
-              disabled={!formData.agreeToTerms}
+              disabled={!formData.agreeToTerms || loading}
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
             >
-              Create {userType === 'renter' ? 'Renter' : 'Customer'} Account
+              {loading ? 'Creating Account...' : `Create ${userType === 'renter' ? 'Renter' : 'Customer'} Account`}
             </Button>
 
             {/* Divider */}
@@ -349,8 +382,10 @@ const Signup = () => {
             <div className="grid grid-cols-2 gap-4">
               <Button 
                 type="button" 
-                variant="outline" 
-                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300"
+                variant="outline"
+                disabled={loading}
+                onClick={() => handleOAuthSignup('google')}
+                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300 disabled:opacity-50"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -362,8 +397,10 @@ const Signup = () => {
               </Button>
               <Button 
                 type="button" 
-                variant="outline" 
-                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300"
+                variant="outline"
+                disabled={loading}
+                onClick={() => handleOAuthSignup('facebook')}
+                className="h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300 disabled:opacity-50"
               >
                 <svg className="w-5 h-5 mr-2" fill="#1877f2" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
