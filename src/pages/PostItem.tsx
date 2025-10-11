@@ -9,20 +9,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocationInput } from '@/components/LocationInput';
+import { useItems } from '@/hooks/useItems';
+import { useToast } from '@/components/ui/use-toast';
 
 const PostItem = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { loading, createItem, publishItem } = useItems();
   const [currentStep, setCurrentStep] = useState(1);
+  const [currentItemId, setCurrentItemId] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
-    price: '',
-    priceType: 'day',
+    dailyPrice: '',
+    weeklyPrice: '',
+    monthlyPrice: '',
     location: '',
     locationData: null as google.maps.places.PlaceResult | null,
-    images: [] as string[],
-    availableDates: [] as Date[],
+    imagePreviews: [] as string[],
+    availableFrom: null as Date | null,
+    availableTo: null as Date | null,
     rules: [''],
     features: ['']
   });
@@ -56,19 +64,23 @@ const PostItem = () => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      // In a real app, upload to server and get URLs
-      const newImages = Array.from(files).map(() => '/placeholder.svg');
+      const newFiles = Array.from(files).slice(0, 10 - imageFiles.length);
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+      
+      setImageFiles(prev => [...prev, ...newFiles]);
       setFormData(prev => ({
         ...prev,
-        images: [...prev.images, ...newImages].slice(0, 10)
+        imagePreviews: [...prev.imagePreviews, ...newPreviews]
       }));
     }
   };
 
   const removeImage = (index: number) => {
+    URL.revokeObjectURL(formData.imagePreviews[index]);
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
     setFormData(prev => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
     }));
   };
 
@@ -114,10 +126,47 @@ const PostItem = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Submitting item:', formData);
-    // In real app, submit to backend
-    navigate('/dashboard');
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.description || !formData.category || !formData.location) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please fill in all required fields.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (imageFiles.length === 0) {
+      toast({
+        title: 'Missing Images',
+        description: 'Please upload at least one photo.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const item = await createItem({
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      location: formData.location,
+      dailyPrice: formData.dailyPrice ? parseFloat(formData.dailyPrice) : undefined,
+      weeklyPrice: formData.weeklyPrice ? parseFloat(formData.weeklyPrice) : undefined,
+      monthlyPrice: formData.monthlyPrice ? parseFloat(formData.monthlyPrice) : undefined,
+      availableFrom: formData.availableFrom || undefined,
+      availableTo: formData.availableTo || undefined,
+      rules: formData.rules.filter(r => r.trim()).join('\n'),
+      features: formData.features.filter(f => f.trim())
+    }, imageFiles);
+
+    if (item) {
+      setCurrentItemId(item.id);
+      // Auto-publish
+      const published = await publishItem(item.id);
+      if (published) {
+        navigate('/dashboard');
+      }
+    }
   };
 
   const steps = [
@@ -271,9 +320,9 @@ const PostItem = () => {
                   </div>
 
                   {/* Uploaded Images */}
-                  {formData.images.length > 0 && (
+                  {formData.imagePreviews.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                      {formData.images.map((image, index) => (
+                      {formData.imagePreviews.map((image, index) => (
                         <div key={index} className="relative group">
                           <img 
                             src={image} 
@@ -297,39 +346,60 @@ const PostItem = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 block">
+                    Pricing (PKR) *
+                  </Label>
+                  
                   <div>
-                    <Label htmlFor="price" className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                      Price (PKR) *
+                    <Label htmlFor="dailyPrice" className="text-sm text-gray-600 dark:text-gray-400 mb-2 block">
+                      Daily Price
                     </Label>
                     <div className="relative">
                       <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                       <Input
-                        id="price"
+                        id="dailyPrice"
                         type="number"
                         placeholder="0"
-                        value={formData.price}
-                        onChange={(e) => handleInputChange('price', e.target.value)}
+                        value={formData.dailyPrice}
+                        onChange={(e) => handleInputChange('dailyPrice', e.target.value)}
                         className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="priceType" className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                      Price Type *
+                    <Label htmlFor="weeklyPrice" className="text-sm text-gray-600 dark:text-gray-400 mb-2 block">
+                      Weekly Price (Optional)
                     </Label>
-                    <select
-                      id="priceType"
-                      value={formData.priceType}
-                      onChange={(e) => handleInputChange('priceType', e.target.value)}
-                      className="w-full h-12 px-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-green-500 focus:outline-none dark:bg-gray-700 dark:text-white"
-                    >
-                      <option value="hour">Per Hour</option>
-                      <option value="day">Per Day</option>
-                      <option value="week">Per Week</option>
-                      <option value="month">Per Month</option>
-                    </select>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+                      <Input
+                        id="weeklyPrice"
+                        type="number"
+                        placeholder="0"
+                        value={formData.weeklyPrice}
+                        onChange={(e) => handleInputChange('weeklyPrice', e.target.value)}
+                        className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="monthlyPrice" className="text-sm text-gray-600 dark:text-gray-400 mb-2 block">
+                      Monthly Price (Optional)
+                    </Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+                      <Input
+                        id="monthlyPrice"
+                        type="number"
+                        placeholder="0"
+                        value={formData.monthlyPrice}
+                        onChange={(e) => handleInputChange('monthlyPrice', e.target.value)}
+                        className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -377,20 +447,32 @@ const PostItem = () => {
             {/* Step 3: Availability & Rules */}
             {currentStep === 3 && (
               <>
-                <div>
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 block">
-                    Availability Calendar
-                  </Label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Select the dates when your item is available for rent
-                  </p>
-                  <CalendarComponent
-                    mode="multiple"
-                    selected={formData.availableDates}
-                    onSelect={(dates) => handleInputChange('availableDates', dates || [])}
-                    disabled={(date) => date < new Date()}
-                    className="rounded-lg border dark:border-gray-600 p-4 dark:bg-gray-700"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                      Available From *
+                    </Label>
+                    <CalendarComponent
+                      mode="single"
+                      selected={formData.availableFrom || undefined}
+                      onSelect={(date) => handleInputChange('availableFrom', date || null)}
+                      disabled={(date) => date < new Date()}
+                      className="rounded-lg border dark:border-gray-600 dark:bg-gray-700"
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                      Available Until *
+                    </Label>
+                    <CalendarComponent
+                      mode="single"
+                      selected={formData.availableTo || undefined}
+                      onSelect={(date) => handleInputChange('availableTo', date || null)}
+                      disabled={(date) => date < (formData.availableFrom || new Date())}
+                      className="rounded-lg border dark:border-gray-600 dark:bg-gray-700"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -448,7 +530,7 @@ const PostItem = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <img 
-                        src={formData.images[0] || '/placeholder.svg'} 
+                        src={formData.imagePreviews[0] || '/placeholder.svg'} 
                         alt="Preview"
                         className="w-full h-48 object-cover rounded-lg"
                       />
@@ -456,10 +538,26 @@ const PostItem = () => {
                     <div>
                       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{formData.title}</h2>
                       <p className="text-green-600 dark:text-green-400 font-semibold mb-2">{formData.category}</p>
-                      <p className="text-3xl font-bold mb-2 dark:text-white">
-                        PKR {parseInt(formData.price).toLocaleString()}
-                        <span className="text-lg font-normal text-gray-600 dark:text-gray-400">/{formData.priceType}</span>
-                      </p>
+                      <div className="space-y-1 mb-2">
+                        {formData.dailyPrice && (
+                          <p className="text-2xl font-bold dark:text-white">
+                            PKR {parseInt(formData.dailyPrice).toLocaleString()}
+                            <span className="text-lg font-normal text-gray-600 dark:text-gray-400">/day</span>
+                          </p>
+                        )}
+                        {formData.weeklyPrice && (
+                          <p className="text-lg dark:text-white">
+                            PKR {parseInt(formData.weeklyPrice).toLocaleString()}
+                            <span className="text-sm font-normal text-gray-600 dark:text-gray-400">/week</span>
+                          </p>
+                        )}
+                        {formData.monthlyPrice && (
+                          <p className="text-lg dark:text-white">
+                            PKR {parseInt(formData.monthlyPrice).toLocaleString()}
+                            <span className="text-sm font-normal text-gray-600 dark:text-gray-400">/month</span>
+                          </p>
+                        )}
+                      </div>
                       <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 mb-4">
                         <span>{formData.location}</span>
                       </div>

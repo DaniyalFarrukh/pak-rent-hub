@@ -14,7 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
-      posts: {
+      availability: {
+        Row: {
+          available_from: string
+          available_to: string
+          created_at: string
+          id: string
+          item_id: string
+          rules: string | null
+        }
+        Insert: {
+          available_from: string
+          available_to: string
+          created_at?: string
+          id?: string
+          item_id: string
+          rules?: string | null
+        }
+        Update: {
+          available_from?: string
+          available_to?: string
+          created_at?: string
+          id?: string
+          item_id?: string
+          rules?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "availability_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_photos: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          photo_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          photo_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          photo_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_photos_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      items: {
         Row: {
           available_from: string | null
           available_until: string | null
@@ -61,6 +125,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      pricing: {
+        Row: {
+          created_at: string
+          currency: string
+          daily_price: number | null
+          id: string
+          item_id: string
+          monthly_price: number | null
+          weekly_price: number | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          daily_price?: number | null
+          id?: string
+          item_id: string
+          monthly_price?: number | null
+          weekly_price?: number | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          daily_price?: number | null
+          id?: string
+          item_id?: string
+          monthly_price?: number | null
+          weekly_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: true
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
