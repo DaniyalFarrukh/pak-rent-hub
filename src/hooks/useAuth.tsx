@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signUp = async (email: string, password: string, metadata?: { display_name?: string }) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -58,6 +58,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         variant: "destructive",
         title: "Sign Up Failed",
         description: error.message
+      });
+    } else if (data?.session) {
+      toast({
+        title: "Account created",
+        description: "You're signed in and ready to go."
       });
     } else {
       toast({
