@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
-export interface ItemFormData {
+interface CreateItemData {
   title: string;
   description: string;
   category: string;
@@ -20,62 +20,62 @@ export const useItems = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const uploadImage = async (file: File, itemId: string, userId: string): Promise<string | null> => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${userId}/${itemId}/${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError, data } = await supabase.storage
-        .from('item-photos')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
+  const uploadImages = async (itemId: string, files: File[]) => {
+    const uploadedUrls: string[] = [];
+    
+    for (const file of files) {
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${itemId}/${Math.random()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('item-photos')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('item-photos')
+          .getPublicUrl(fileName);
+
+        uploadedUrls.push(publicUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast({
+          title: 'Upload Error',
+          description: `Failed to upload ${file.name}`,
+          variant: 'destructive'
         });
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('item-photos')
-        .getPublicUrl(fileName);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      toast({
-        title: 'Upload Failed',
-        description: 'Failed to upload image. Please try again.',
-        variant: 'destructive'
-      });
-      return null;
+      }
     }
+
+    return uploadedUrls;
   };
 
-  const createItem = async (formData: ItemFormData, images: File[]) => {
+  const createItem = async (data: CreateItemData, imageFiles: File[]) => {
     setLoading(true);
     try {
+      // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) {
         toast({
           title: 'Authentication Required',
-          description: 'Please log in to create a listing.',
+          description: 'Please log in to post an item',
           variant: 'destructive'
         });
         return null;
       }
 
-      // Create item
+      // Create item in database
       const { data: item, error: itemError } = await supabase
         .from('items')
         .insert({
           user_id: user.id,
-          title: formData.title,
-          description: formData.description,
-          category: formData.category,
-          location: formData.location,
-          status: 'draft',
-          available_from: formData.availableFrom?.toISOString().split('T')[0],
-          available_until: formData.availableTo?.toISOString().split('T')[0]
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          location: data.location,
+          status: 'draft'
         })
         .select()
         .single();
@@ -83,54 +83,44 @@ export const useItems = () => {
       if (itemError) throw itemError;
 
       // Upload images
-      const uploadPromises = images.map(file => uploadImage(file, item.id, user.id));
-      const uploadedUrls = await Promise.all(uploadPromises);
-      const validUrls = uploadedUrls.filter(url => url !== null) as string[];
+      if (imageFiles.length > 0) {
+        const photoUrls = await uploadImages(item.id, imageFiles);
+        
+        // Save photo URLs to database
+        if (photoUrls.length > 0) {
+          const photoInserts = photoUrls.map(url => ({
+            item_id: item.id,
+            photo_url: url
+          }));
 
-      // Insert photos
-      if (validUrls.length > 0) {
-        const photoInserts = validUrls.map(url => ({
-          item_id: item.id,
-          photo_url: url
-        }));
-
-        const { error: photosError } = await supabase
-          .from('item_photos')
-          .insert(photoInserts);
-
-        if (photosError) throw photosError;
+          await supabase.from('item_photos').insert(photoInserts);
+        }
       }
 
-      // Insert pricing
-      const { error: pricingError } = await supabase
-        .from('pricing')
-        .insert({
+      // Add pricing if provided
+      if (data.dailyPrice || data.weeklyPrice || data.monthlyPrice) {
+        await supabase.from('pricing').insert({
           item_id: item.id,
-          daily_price: formData.dailyPrice,
-          weekly_price: formData.weeklyPrice,
-          monthly_price: formData.monthlyPrice,
+          daily_price: data.dailyPrice,
+          weekly_price: data.weeklyPrice,
+          monthly_price: data.monthlyPrice,
           currency: 'PKR'
         });
+      }
 
-      if (pricingError) throw pricingError;
-
-      // Insert availability with rules
-      if (formData.availableFrom && formData.availableTo) {
-        const { error: availabilityError } = await supabase
-          .from('availability')
-          .insert({
-            item_id: item.id,
-            available_from: formData.availableFrom.toISOString().split('T')[0],
-            available_to: formData.availableTo.toISOString().split('T')[0],
-            rules: formData.rules
-          });
-
-        if (availabilityError) throw availabilityError;
+      // Add availability if provided
+      if (data.availableFrom && data.availableTo) {
+        await supabase.from('availability').insert({
+          item_id: item.id,
+          available_from: data.availableFrom.toISOString().split('T')[0],
+          available_to: data.availableTo.toISOString().split('T')[0],
+          rules: data.rules || null
+        });
       }
 
       toast({
-        title: 'Success!',
-        description: 'Your item has been created successfully.',
+        title: 'Success',
+        description: 'Item created successfully!'
       });
 
       return item;
@@ -138,7 +128,7 @@ export const useItems = () => {
       console.error('Error creating item:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to create item. Please try again.',
+        description: error.message || 'Failed to create item',
         variant: 'destructive'
       });
       return null;
@@ -159,7 +149,7 @@ export const useItems = () => {
 
       toast({
         title: 'Published!',
-        description: 'Your item is now live and visible to renters.',
+        description: 'Your item is now live and available for rent'
       });
 
       return true;
@@ -167,7 +157,7 @@ export const useItems = () => {
       console.error('Error publishing item:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to publish item.',
+        description: error.message || 'Failed to publish item',
         variant: 'destructive'
       });
       return false;
@@ -176,11 +166,9 @@ export const useItems = () => {
     }
   };
 
-  const getMyItems = async () => {
-    setLoading(true);
+  const fetchMyItems = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) return [];
 
       const { data, error } = await supabase
@@ -194,23 +182,19 @@ export const useItems = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
       return data || [];
     } catch (error: any) {
       console.error('Error fetching items:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch your items.',
+        description: 'Failed to fetch your items',
         variant: 'destructive'
       });
       return [];
-    } finally {
-      setLoading(false);
     }
   };
 
   const deleteItem = async (itemId: string) => {
-    setLoading(true);
     try {
       const { error } = await supabase
         .from('items')
@@ -221,7 +205,7 @@ export const useItems = () => {
 
       toast({
         title: 'Deleted',
-        description: 'Item has been deleted successfully.',
+        description: 'Item deleted successfully'
       });
 
       return true;
@@ -229,12 +213,10 @@ export const useItems = () => {
       console.error('Error deleting item:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to delete item.',
+        description: 'Failed to delete item',
         variant: 'destructive'
       });
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -242,7 +224,7 @@ export const useItems = () => {
     loading,
     createItem,
     publishItem,
-    getMyItems,
+    fetchMyItems,
     deleteItem
   };
 };
