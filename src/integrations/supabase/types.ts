@@ -126,6 +126,48 @@ export type Database = {
         }
         Relationships: []
       }
+      listings: {
+        Row: {
+          available: boolean | null
+          category: string | null
+          created_at: string
+          description: string | null
+          id: number
+          location: string | null
+          owner: string
+          photos: string[] | null
+          price: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          available?: boolean | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          location?: string | null
+          owner: string
+          photos?: string[] | null
+          price?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          available?: boolean | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          location?: string | null
+          owner?: string
+          photos?: string[] | null
+          price?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pricing: {
         Row: {
           created_at: string
@@ -199,6 +241,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: number
+          listing_id: number
+          rating: number
+          reviewer: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          listing_id: number
+          rating: number
+          reviewer: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          listing_id?: number
+          rating?: number
+          reviewer?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
