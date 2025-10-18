@@ -1,7 +1,10 @@
 project_id = "fioxfwmcoylpszgreteo"
 
 [functions.items]
-verify_jwt = true
+verify_jwt = false
 
 [functions.my-items]
 verify_jwt = true
+
+[functions.chat]
+verify_jwt = false
