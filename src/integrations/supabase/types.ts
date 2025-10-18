@@ -133,10 +133,13 @@ export type Database = {
           created_at: string
           description: string | null
           id: number
+          latitude: number | null
           location: string | null
+          longitude: number | null
           owner: string
           photos: string[] | null
           price: number | null
+          rating: number | null
           title: string
           updated_at: string
         }
@@ -146,10 +149,13 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           owner: string
           photos?: string[] | null
           price?: number | null
+          rating?: number | null
           title: string
           updated_at?: string
         }
@@ -159,10 +165,13 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           owner?: string
           photos?: string[] | null
           price?: number | null
+          rating?: number | null
           title?: string
           updated_at?: string
         }
@@ -282,7 +291,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_listing_rating: {
+        Args: { listing_id: number }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
