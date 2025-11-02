@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, X, Plus, Calendar, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,12 +11,26 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocationInput } from '@/components/LocationInput';
 import { useItems } from '@/hooks/useItems';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const PostItem = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
   const { loading, createItem, publishItem } = useItems();
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      toast({
+        title: 'Authentication Required',
+        description: 'Please sign in to list your item.',
+        variant: 'destructive'
+      });
+      navigate('/login');
+    }
+  }, [user, authLoading, navigate, toast]);
   const [currentItemId, setCurrentItemId] = useState<string | null>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
