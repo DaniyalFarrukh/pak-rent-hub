@@ -22,7 +22,7 @@ const Signup = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/home');
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -38,7 +38,7 @@ const Signup = () => {
     if (signUpError) {
       setError(signUpError.message || 'Failed to create account. Please try again.');
     } else {
-      navigate('/home');
+      navigate('/');
     }
     setLoading(false);
   };
