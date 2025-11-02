@@ -179,7 +179,7 @@ const Listings = () => {
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/browse" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Browse</Link>
-              <Link to="/post-item" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">List Your Item</Link>
+              <Link to="/add-listing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">List Your Item</Link>
               <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
@@ -209,7 +209,7 @@ const Listings = () => {
           <div className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800 shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/browse" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Browse</Link>
-              <Link to="/post-item" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
+              <Link to="/add-listing" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
               <Link to="/contact" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
               <div className="border-t dark:border-gray-800 pt-4 mt-4">
                 <Link 
