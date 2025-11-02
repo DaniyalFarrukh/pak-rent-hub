@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { Star, MapPin, Loader2, ArrowLeft } from 'lucide-react';
+import { Star, MapPin, Loader2, ArrowLeft, MessageCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import ChatInterface from '@/components/Chat/ChatInterface';
 
 interface Listing {
   id: number;
@@ -18,6 +19,7 @@ interface Listing {
   price: number;
   photos: string[];
   created_at: string;
+  owner: string;
 }
 
 interface Review {
@@ -40,6 +42,9 @@ const ListingDetail = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [showChat, setShowChat] = useState(false);
+  const [chatId, setChatId] = useState<string | null>(null);
+  const [ownerName, setOwnerName] = useState<string>('Owner');
   
   const [reviewForm, setReviewForm] = useState({
     rating: 5,
@@ -64,6 +69,19 @@ const ListingDetail = () => {
 
       if (listingError) throw listingError;
       setListing(listingData);
+
+      // Fetch owner name
+      if (listingData.owner) {
+        const { data: ownerProfile } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', listingData.owner)
+          .single();
+        
+        if (ownerProfile?.display_name) {
+          setOwnerName(ownerProfile.display_name);
+        }
+      }
 
       // Fetch reviews
       const { data: reviewsData, error: reviewsError } = await supabase
@@ -141,6 +159,62 @@ const ListingDetail = () => {
     }
   };
 
+  const handleMessageOwner = async () => {
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Authentication required',
+        description: 'Please sign in to message the owner'
+      });
+      navigate('/login');
+      return;
+    }
+
+    if (!listing) return;
+
+    try {
+      // Check if chat already exists
+      const { data: existingChat, error: chatError } = await supabase
+        .from('chats')
+        .select('id')
+        .eq('listing_id', listing.id)
+        .eq('renter_id', user.id)
+        .eq('owner_id', listing.owner)
+        .single();
+
+      if (chatError && chatError.code !== 'PGRST116') {
+        throw chatError;
+      }
+
+      if (existingChat) {
+        setChatId(existingChat.id);
+        setShowChat(true);
+      } else {
+        // Create new chat
+        const { data: newChat, error: createError } = await supabase
+          .from('chats')
+          .insert({
+            listing_id: listing.id,
+            renter_id: user.id,
+            owner_id: listing.owner
+          })
+          .select()
+          .single();
+
+        if (createError) throw createError;
+
+        setChatId(newChat.id);
+        setShowChat(true);
+      }
+    } catch (err: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to start chat'
+      });
+    }
+  };
+
   const renderStars = (rating: number, interactive = false, onClick?: (rating: number) => void) => {
     return (
       <div className="flex gap-1">
@@ -189,6 +263,27 @@ const ListingDetail = () => {
               </Button>
             </CardContent>
           </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (showChat && chatId && listing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 p-4 md:p-8">
+        <div className="max-w-4xl mx-auto">
+          <Button variant="ghost" onClick={() => setShowChat(false)} className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Listing
+          </Button>
+          <div className="h-[600px]">
+            <ChatInterface
+              chatId={chatId}
+              receiverId={listing.owner}
+              receiverName={ownerName}
+              onClose={() => setShowChat(false)}
+            />
+          </div>
         </div>
       </div>
     );
@@ -258,6 +353,18 @@ const ListingDetail = () => {
                   {listing.description || 'No description provided'}
                 </p>
               </div>
+
+              {/* Message Owner Button */}
+              {user && user.id !== listing.owner && (
+                <Button
+                  onClick={handleMessageOwner}
+                  className="w-full mb-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                  size="lg"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Message Owner
+                </Button>
+              )}
 
               {reviews.length > 0 && (
                 <div className="flex items-center gap-2 pt-4 border-t">

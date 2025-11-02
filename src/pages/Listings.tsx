@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Star, MapPin, Loader2, Search, Menu, X, Key, Plus } from 'lucide-react';
+import { Star, MapPin, Loader2, Search, Menu, X, Key, Plus, LogOut, MessageCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LocationInput } from '@/components/LocationInput';
 import { MapDisplay } from '@/components/MapDisplay';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface Listing {
   id: number;
@@ -20,6 +22,9 @@ interface Listing {
 }
 
 const Listings = () => {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -27,6 +32,15 @@ const Listings = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({
+      title: 'Signed out successfully',
+      description: 'You have been logged out of your account'
+    });
+    navigate('/');
+  };
 
   // Debounce search term
   useEffect(() => {
@@ -177,18 +191,38 @@ const Listings = () => {
                 </div>
               </Link>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               <Link to="/browse" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Browse</Link>
               <Link to="/add-listing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">List Your Item</Link>
               <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
-              <div className="flex items-center space-x-4">
-                <ThemeToggle />
-                <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  <Link to="/add-listing">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Listing
+              <div className="flex items-center space-x-3">
+                {user && (
+                  <Link to="/messages">
+                    <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Messages
+                    </Button>
                   </Link>
-                </Button>
+                )}
+                <ThemeToggle />
+                {user ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="border-gray-300 dark:border-gray-600"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                ) : (
+                  <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    <Link to="/add-listing">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Listing
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
             <div className="md:hidden flex items-center space-x-3">
@@ -211,13 +245,30 @@ const Listings = () => {
               <Link to="/browse" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Browse</Link>
               <Link to="/add-listing" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
               <Link to="/contact" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
-              <div className="border-t dark:border-gray-800 pt-4 mt-4">
-                <Link 
-                  to="/add-listing" 
-                  className="block mx-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium text-center"
-                >
-                  Add Listing
+              {user && (
+                <Link to="/messages" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                  <MessageCircle className="w-4 h-4 inline mr-2" />
+                  Messages
                 </Link>
+              )}
+              <div className="border-t dark:border-gray-800 pt-4 mt-4">
+                {user ? (
+                  <Button
+                    variant="outline"
+                    onClick={handleSignOut}
+                    className="w-full mx-3 border-gray-300 dark:border-gray-600"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                ) : (
+                  <Link 
+                    to="/add-listing" 
+                    className="block mx-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium text-center"
+                  >
+                    Add Listing
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -236,28 +287,32 @@ const Listings = () => {
             </p>
           </div>
 
-          {/* Search and Filter Section */}
-          <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border dark:border-gray-700">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
-                    type="text"
-                    placeholder="Search by title, category, or description..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 h-12 text-base border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
+          {/* Search and Filter Section - Better Aligned */}
+          <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border dark:border-gray-700">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                <Input
+                  type="text"
+                  placeholder="Search by title, category, or description..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-12 h-14 text-base border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 dark:bg-gray-700 dark:text-white rounded-xl shadow-sm"
+                />
               </div>
-              <div>
+              <div className="flex-1">
                 <LocationInput
                   placeholder="Filter by location..."
                   value={selectedLocation}
                   onChange={(value) => setSelectedLocation(value)}
                 />
               </div>
+              <Button 
+                className="h-14 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg font-semibold rounded-xl whitespace-nowrap"
+              >
+                <Search className="w-5 h-5 mr-2" />
+                Search Now
+              </Button>
             </div>
             
             {/* Results count */}
