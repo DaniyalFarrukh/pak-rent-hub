@@ -22,7 +22,7 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/home');
     }
   }, [user, navigate]);
 
@@ -36,7 +36,7 @@ const Login = () => {
     if (signInError) {
       setError(signInError.message || 'Failed to sign in. Please check your credentials.');
     } else {
-      navigate('/');
+      navigate('/home');
     }
     setLoading(false);
   };
