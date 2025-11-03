@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { LocationInput } from '@/components/LocationInput';
 import { MapDisplay } from '@/components/MapDisplay';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
@@ -246,76 +247,94 @@ const Listings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-900 shadow-lg border-b dark:border-gray-800 sticky top-0 z-30">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+      {/* Modern Navigation */}
+      <nav className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-3">
-                <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-12">
-                    <Key className="w-6 h-6 text-white transform -rotate-12" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">R</span>
-                  </div>
+          <div className="flex justify-between items-center h-20">
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl transform group-hover:scale-105 transition-transform duration-300">
+                  <Key className="w-7 h-7 text-white transform -rotate-12" />
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    Easy Lease
-                  </h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">Rental Made Simple</p>
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white text-xs font-bold">R</span>
                 </div>
-              </Link>
-            </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link to="/browse" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Browse</Link>
-              <Link to="/add-listing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">List Your Item</Link>
-              <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
-              <div className="flex items-center space-x-3">
-                {user && (
-                  <>
-                    <Link to="/user-dashboard">
-                      <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <Link to="/messages">
-                      <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Messages
-                      </Button>
-                    </Link>
-                  </>
-                )}
-                <ThemeToggle />
-                {user ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSignOut}
-                    className="border-gray-300 dark:border-gray-600"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
-                  </Button>
-                ) : (
-                  <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                    <Link to="/add-listing">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Listing
-                    </Link>
-                  </Button>
-                )}
               </div>
+              <div>
+                <h1 className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                  Easy Lease
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium -mt-0.5">Rental Made Simple</p>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Link to="/browse">
+                <Button variant="ghost" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium">
+                  Browse
+                </Button>
+              </Link>
+              <Link to="/add-listing">
+                <Button variant="ghost" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium">
+                  List Your Item
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="ghost" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium">
+                  Support
+                </Button>
+              </Link>
+              
+              <div className="w-px h-8 bg-gray-200 dark:bg-gray-700 mx-2"></div>
+              
+              {user && (
+                <>
+                  <Link to="/user-dashboard">
+                    <Button variant="outline" size="sm" className="border-2 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                  <Link to="/messages">
+                    <Button variant="outline" size="sm" className="border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20">
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Messages
+                    </Button>
+                  </Link>
+                </>
+              )}
+              
+              <ThemeToggle />
+              
+              {user ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignOut}
+                  className="border-2 border-red-200 dark:border-red-800 hover:border-red-400 dark:hover:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              ) : (
+                <Button asChild className="bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 hover:from-blue-700 hover:via-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Link to="/login">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Get Started
+                  </Link>
+                </Button>
+              )}
             </div>
+
+            {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center space-x-3">
               <ThemeToggle />
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Toggle mobile menu"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -326,97 +345,134 @@ const Listings = () => {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800 shadow-lg">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/browse" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Browse</Link>
-              <Link to="/add-listing" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
-              <Link to="/contact" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
+          <div className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800 shadow-xl">
+            <div className="px-4 pt-2 pb-4 space-y-2">
+              <Link to="/browse" className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors">Browse</Link>
+              <Link to="/add-listing" className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors">List Your Item</Link>
+              <Link to="/contact" className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors">Support</Link>
               {user && (
                 <>
-                  <Link to="/user-dashboard" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                  <Separator className="my-2" />
+                  <Link to="/user-dashboard" className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors">
                     <LayoutDashboard className="w-4 h-4 inline mr-2" />
                     Dashboard
                   </Link>
-                  <Link to="/messages" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                  <Link to="/messages" className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors">
                     <MessageCircle className="w-4 h-4 inline mr-2" />
                     Messages
                   </Link>
                 </>
               )}
-              <div className="border-t dark:border-gray-800 pt-4 mt-4">
-                {user ? (
-                  <Button
-                    variant="outline"
-                    onClick={handleSignOut}
-                    className="w-full mx-3 border-gray-300 dark:border-gray-600"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
-                  </Button>
-                ) : (
-                  <Link 
-                    to="/add-listing" 
-                    className="block mx-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium text-center"
-                  >
-                    Add Listing
+              <Separator className="my-2" />
+              {user ? (
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                  className="w-full border-2 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              ) : (
+                <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  <Link to="/login">
+                    Get Started
                   </Link>
-                )}
-              </div>
+                </Button>
+              )}
             </div>
           </div>
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-              Browse <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Rental Listings</span>
+      {/* Hero Section with Search */}
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 dark:from-blue-900 dark:via-blue-800 dark:to-purple-900 py-20 overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-300 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-5xl lg:text-6xl font-extrabold text-white mb-6 drop-shadow-2xl">
+              Find Your Perfect <span className="text-yellow-300">Rental</span>
             </h2>
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-8">
-              Find exactly what you need from verified renters across Pakistan
+            <p className="text-xl lg:text-2xl text-white/90 mb-2 font-medium">
+              Browse through thousands of verified listings
+            </p>
+            <p className="text-lg text-white/80">
+              Cars • Tools • Dresses • Equipment & More
             </p>
           </div>
 
-          {/* Search and Filter Section - Better Aligned */}
-          <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border dark:border-gray-700">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                <Input
-                  type="text"
-                  placeholder="Search by title, category, or description..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 h-14 text-base border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 dark:bg-gray-700 dark:text-white rounded-xl shadow-sm"
-                />
-              </div>
-              <div className="flex-1">
-                <LocationInput
-                  placeholder="Filter by location..."
-                  value={selectedLocation}
-                  onChange={(value) => setSelectedLocation(value)}
-                />
-              </div>
-              <Button 
-                className="h-14 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg font-semibold rounded-xl whitespace-nowrap"
-              >
-                <Search className="w-5 h-5 mr-2" />
-                Search Now
-              </Button>
-            </div>
-            
-            {/* Results count */}
-            <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
-              <span className="font-semibold text-blue-600 dark:text-blue-400">{listings.length}</span> {listings.length === 1 ? 'listing' : 'listings'} found
-            </div>
+          {/* Enhanced Search Bar */}
+          <div className="max-w-5xl mx-auto">
+            <Card className="border-4 border-white/20 shadow-2xl backdrop-blur-sm bg-white/95 dark:bg-gray-900/95">
+              <CardContent className="p-8">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  {/* Search Input */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      What are you looking for?
+                    </label>
+                    <div className="relative">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                      <Input
+                        type="text"
+                        placeholder="Search cars, tools, dresses, equipment..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-12 h-16 text-base border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 dark:bg-gray-800 dark:text-white rounded-xl shadow-sm hover:shadow-md transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Location Filter */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Location
+                    </label>
+                    <LocationInput
+                      placeholder="Enter city or area..."
+                      value={selectedLocation}
+                      onChange={(value) => setSelectedLocation(value)}
+                    />
+                  </div>
+
+                  {/* Search Button */}
+                  <div className="lg:flex lg:items-end">
+                    <Button 
+                      className="h-16 px-10 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 hover:from-blue-700 hover:via-blue-600 hover:to-purple-700 shadow-xl hover:shadow-2xl font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 w-full lg:w-auto"
+                    >
+                      <Search className="w-6 h-6 mr-2" />
+                      Search
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Results count */}
+                <div className="mt-6 text-center">
+                  <p className="text-gray-600 dark:text-gray-400 text-lg">
+                    <span className="font-bold text-2xl text-blue-600 dark:text-blue-400">{listings.length}</span> 
+                    <span className="ml-2">{listings.length === 1 ? 'listing' : 'listings'} available</span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
+        </div>
+
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V120Z" fill="currentColor" className="text-gray-50 dark:text-gray-900"/>
+          </svg>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-12 bg-white dark:bg-gray-900">
+      <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Map Display */}
           {listings.length > 0 && (
