@@ -380,7 +380,19 @@ const ListingDetail = () => {
         {/* Reviews Section */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>Reviews ({reviews.length})</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle>Reviews ({reviews.length})</CardTitle>
+              {(!user || user.id !== listing.owner) && (
+                <Button
+                  onClick={handleMessageOwner}
+                  className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                  size="lg"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  {user ? 'Chat with Owner' : 'Sign In to Chat'}
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             {reviews.length === 0 ? (
