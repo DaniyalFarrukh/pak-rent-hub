@@ -19,6 +19,7 @@ interface Listing {
   price: number;
   photos: string[];
   average_rating?: number;
+  owner: string;
 }
 
 const Listings = () => {
@@ -32,6 +33,7 @@ const Listings = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [ownerNames, setOwnerNames] = useState<Map<string, string>>(new Map());
 
   const handleSignOut = async () => {
     await signOut();
@@ -114,6 +116,16 @@ const Listings = () => {
         average_rating: ratingsMap.get(listing.id)
       })) || [];
 
+      // Fetch owner names
+      const ownerIds = [...new Set(listingsWithRatings.map(l => l.owner))];
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, display_name')
+        .in('user_id', ownerIds);
+
+      const namesMap = new Map(profilesData?.map(p => [p.user_id, p.display_name || 'Owner']) || []);
+      setOwnerNames(namesMap);
+
       setListings(listingsWithRatings);
     } catch (err: any) {
       setError(err.message || 'Failed to load listings');
@@ -140,6 +152,72 @@ const Listings = () => {
         <span className="text-sm font-medium ml-1">{rating.toFixed(1)}</span>
       </div>
     );
+  };
+
+  const handleMessageOwner = async (listing: Listing, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Authentication required',
+        description: 'Please sign in to message the owner'
+      });
+      navigate('/login');
+      return;
+    }
+
+    if (user.id === listing.owner) {
+      toast({
+        variant: 'destructive',
+        title: 'Cannot message yourself',
+        description: 'This is your own listing'
+      });
+      return;
+    }
+
+    try {
+      // Check if chat already exists
+      const { data: existingChat, error: chatError } = await supabase
+        .from('chats')
+        .select('id')
+        .eq('listing_id', listing.id)
+        .eq('renter_id', user.id)
+        .eq('owner_id', listing.owner)
+        .maybeSingle();
+
+      if (chatError && chatError.code !== 'PGRST116') {
+        throw chatError;
+      }
+
+      if (existingChat) {
+        navigate('/messages');
+      } else {
+        // Create new chat
+        const { error: createError } = await supabase
+          .from('chats')
+          .insert({
+            listing_id: listing.id,
+            renter_id: user.id,
+            owner_id: listing.owner
+          });
+
+        if (createError) throw createError;
+
+        toast({
+          title: 'Chat started',
+          description: `You can now message ${ownerNames.get(listing.owner) || 'the owner'}`
+        });
+        navigate('/messages');
+      }
+    } catch (err: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to start chat'
+      });
+    }
   };
 
   // Prepare map markers
@@ -373,44 +451,57 @@ const Listings = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {listings.map((listing) => (
-                <Link key={listing.id} to={`/listings/${listing.id}`}>
-                  <Card className="group h-full hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-200 dark:hover:border-blue-700 dark:bg-gray-800 dark:border-gray-700">
-                    <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-gray-100 dark:bg-gray-700">
-                      {listing.photos && listing.photos.length > 0 ? (
-                        <img
-                          src={listing.photos[0]}
-                          alt={listing.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
-                          <Search className="w-12 h-12" />
+                <div key={listing.id} className="relative">
+                  <Link to={`/listings/${listing.id}`}>
+                    <Card className="group h-full hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-200 dark:hover:border-blue-700 dark:bg-gray-800 dark:border-gray-700">
+                      <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-gray-100 dark:bg-gray-700">
+                        {listing.photos && listing.photos.length > 0 ? (
+                          <img
+                            src={listing.photos[0]}
+                            alt={listing.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
+                            <Search className="w-12 h-12" />
+                          </div>
+                        )}
+                      </div>
+                      <CardHeader className="pb-3">
+                        <div className="flex justify-between items-start mb-2">
+                          <CardTitle className="text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors dark:text-white">{listing.title}</CardTitle>
                         </div>
-                      )}
-                    </div>
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-start mb-2">
-                        <CardTitle className="text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors dark:text-white">{listing.title}</CardTitle>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                          Rs {listing.price?.toLocaleString()}
-                        </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">/day</span>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <CardDescription className="flex items-center gap-2 mb-3 dark:text-gray-400">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">{listing.location || 'Location not specified'}</span>
-                      </CardDescription>
-                      <div className="flex justify-between items-center pt-3 border-t dark:border-gray-700">
-                        <span className="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full font-medium">{listing.category}</span>
-                        {renderStars(listing.average_rating)}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Rs {listing.price?.toLocaleString()}
+                          </span>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">/day</span>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <CardDescription className="flex items-center gap-2 mb-3 dark:text-gray-400">
+                          <MapPin className="w-4 h-4 flex-shrink-0" />
+                          <span className="truncate">{listing.location || 'Location not specified'}</span>
+                        </CardDescription>
+                        <div className="flex justify-between items-center pt-3 border-t dark:border-gray-700 mb-3">
+                          <span className="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full font-medium">{listing.category}</span>
+                          {renderStars(listing.average_rating)}
+                        </div>
+                        {/* Message Owner Button */}
+                        {(!user || user.id !== listing.owner) && (
+                          <Button
+                            onClick={(e) => handleMessageOwner(listing, e)}
+                            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-md hover:shadow-lg transition-all"
+                            size="sm"
+                          >
+                            <MessageCircle className="w-4 h-4 mr-2" />
+                            {user ? 'Chat Now' : 'Sign In to Chat'}
+                          </Button>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
