@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Star, MapPin, Loader2, Search, Menu, X, Key, Plus, LogOut, MessageCircle } from 'lucide-react';
+import { Star, MapPin, Loader2, Search, Menu, X, Key, Plus, LogOut, MessageCircle, LayoutDashboard } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -275,12 +275,20 @@ const Listings = () => {
               <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
               <div className="flex items-center space-x-3">
                 {user && (
-                  <Link to="/messages">
-                    <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Messages
-                    </Button>
-                  </Link>
+                  <>
+                    <Link to="/user-dashboard">
+                      <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
+                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Link to="/messages">
+                      <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600">
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Messages
+                      </Button>
+                    </Link>
+                  </>
                 )}
                 <ThemeToggle />
                 {user ? (
@@ -324,10 +332,16 @@ const Listings = () => {
               <Link to="/add-listing" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">List Your Item</Link>
               <Link to="/contact" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Support</Link>
               {user && (
-                <Link to="/messages" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
-                  <MessageCircle className="w-4 h-4 inline mr-2" />
-                  Messages
-                </Link>
+                <>
+                  <Link to="/user-dashboard" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                    <LayoutDashboard className="w-4 h-4 inline mr-2" />
+                    Dashboard
+                  </Link>
+                  <Link to="/messages" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                    <MessageCircle className="w-4 h-4 inline mr-2" />
+                    Messages
+                  </Link>
+                </>
               )}
               <div className="border-t dark:border-gray-800 pt-4 mt-4">
                 {user ? (

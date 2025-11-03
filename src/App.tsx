@@ -27,6 +27,7 @@ import Verification from "./pages/Verification";
 import HowItWorks from "./pages/HowItWorks";
 import Safety from "./pages/Safety";
 import Messages from "./pages/Messages";
+import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +66,7 @@ const App = () => (
               <Route path="/safety" element={<Safety />} />
               <Route path="/safety-centre" element={<Safety />} />
               <Route path="/messages" element={<Messages />} />
+              <Route path="/user-dashboard" element={<UserDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
