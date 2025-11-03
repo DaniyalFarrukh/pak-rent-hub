@@ -354,15 +354,15 @@ const ListingDetail = () => {
                 </p>
               </div>
 
-              {/* Message Owner Button */}
-              {user && user.id !== listing.owner && (
+              {/* Message Owner Button - Always visible for non-owners */}
+              {(!user || user.id !== listing.owner) && (
                 <Button
                   onClick={handleMessageOwner}
-                  className="w-full mb-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                  className="w-full mb-6 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                   size="lg"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  Message Owner
+                  {user ? 'Message Owner' : 'Sign In to Message Owner'}
                 </Button>
               )}
 

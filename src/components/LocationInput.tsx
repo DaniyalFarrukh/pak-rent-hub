@@ -86,7 +86,7 @@ export const LocationInput = ({
           value={value}
           onChange={handleInputChange}
           disabled={isLoading}
-          className="pl-10 h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          className="pl-10 h-14 text-base dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-xl shadow-sm"
         />
         {error && (
           <p className="text-sm text-red-500 mt-1">{error}</p>
