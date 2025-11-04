@@ -225,7 +225,7 @@ const RenterGuide = () => {
               <h3 className="text-3xl font-bold text-foreground mb-4">Ready to Start Earning?</h3>
               <p className="text-xl text-muted-foreground mb-8">Join thousands of successful renters across Pakistan</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/post-item">
+                <Link to="/add-listing">
                   <Button size="lg" className="px-8">List Your First Item</Button>
                 </Link>
                 <Link to="/signup">

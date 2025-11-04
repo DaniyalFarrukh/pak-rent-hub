@@ -118,7 +118,7 @@ const Dashboard = () => {
             
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Link to="/post-item">
+              <Link to="/add-listing">
                 <Button className="bg-green-600 hover:bg-green-700">
                   <Plus className="w-4 h-4 mr-2" />
                   Post New Item
@@ -352,7 +352,7 @@ const Dashboard = () => {
                     <CardTitle>My Listings</CardTitle>
                     <CardDescription>Manage your rental items</CardDescription>
                   </div>
-                  <Link to="/post-item">
+                  <Link to="/add-listing">
                     <Button className="bg-green-600 hover:bg-green-700">
                       <Plus className="w-4 h-4 mr-2" />
                       Add New Item

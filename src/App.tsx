@@ -17,7 +17,6 @@ import AddListing from "./pages/AddListing";
 import ItemDetail from "./pages/ItemDetail";
 import Dashboard from "./pages/Dashboard";
 import CustomerDashboard from "./pages/CustomerDashboard";
-import PostItem from "./pages/PostItem";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import Terms from "./pages/Terms";
@@ -53,8 +52,8 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/customer-dashboard" element={<CustomerDashboard />} />
               <Route path="/my-account" element={<CustomerDashboard />} />
-              <Route path="/post-item" element={<PostItem />} />
-              <Route path="/list-item" element={<PostItem />} />
+              <Route path="/post-item" element={<AddListing />} />
+              <Route path="/list-item" element={<AddListing />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/terms" element={<Terms />} />

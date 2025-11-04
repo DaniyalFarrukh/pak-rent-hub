@@ -224,7 +224,7 @@ const HowItWorks = () => {
             <Link to="/browse">
               <Button size="lg" className="px-8">Browse Items</Button>
             </Link>
-            <Link to="/post-item">
+            <Link to="/add-listing">
               <Button variant="outline" size="lg" className="px-8">List Your Item</Button>
             </Link>
           </div>

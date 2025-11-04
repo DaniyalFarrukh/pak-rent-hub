@@ -144,7 +144,7 @@ const Listings = () => {
                   Browse
                 </Button>
               </Link>
-              <Link to="/post-item">
+              <Link to="/add-listing">
                 <Button variant="ghost" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                   List Item
                 </Button>
