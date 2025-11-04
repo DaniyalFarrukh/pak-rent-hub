@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { Search, Filter, MapPin, Star, Heart, Calendar, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,57 +24,50 @@ interface RentalItem {
   featured: boolean;
 }
 
-const sampleItems: RentalItem[] = [
-  {
-    id: '1',
-    title: 'Toyota Corolla 2020 - Perfect for City Tours',
-    price: 8500,
-    priceType: 'day',
-    rating: 4.8,
-    reviewCount: 23,
-    location: 'Lahore, Punjab',
-    category: 'Vehicles',
-    image: '/placeholder.svg',
-    renterName: 'Ahmad Ali',
-    verified: true,
-    featured: true
-  },
-  {
-    id: '2',
-    title: 'Designer Bridal Lehenga - Red & Gold',
-    price: 25000,
-    priceType: 'day',
-    rating: 4.9,
-    reviewCount: 45,
-    location: 'Karachi, Sindh',
-    category: 'Wedding Dresses',
-    image: '/placeholder.svg',
-    renterName: 'Fatima Wedding Collection',
-    verified: true,
-    featured: false
-  },
-  {
-    id: '3',
-    title: 'Professional DSLR Camera Canon 5D',
-    price: 4500,
-    priceType: 'day',
-    rating: 4.7,
-    reviewCount: 18,
-    location: 'Islamabad, ICT',
-    category: 'Electronics',
-    image: '/placeholder.svg',
-    renterName: 'Photo Pro Rentals',
-    verified: true,
-    featured: true
-  }
-];
-
 const Browse = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
+  const [listings, setListings] = useState<RentalItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
+  const fetchListings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('available', true);
+      
+      if (error) throw error;
+      
+      const formattedListings: RentalItem[] = (data || []).map(listing => ({
+        id: listing.id.toString(),
+        title: listing.title,
+        price: listing.price || 0,
+        priceType: 'day',
+        rating: listing.rating || 0,
+        reviewCount: 0,
+        location: listing.location || '',
+        category: listing.category || 'Others',
+        image: listing.photos?.[0] || '/placeholder.svg',
+        renterName: 'Owner',
+        verified: true,
+        featured: false
+      }));
+      
+      setListings(formattedListings);
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = ['All', 'Vehicles', 'Wedding Dresses', 'Electronics', 'Tools & Equipment', 'Event Equipment'];
 
@@ -95,7 +89,7 @@ const Browse = () => {
   };
 
   // Filter items based on search query, category, and location
-  const filteredItems = sampleItems.filter(item => {
+  const filteredItems = listings.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.location.toLowerCase().includes(searchQuery.toLowerCase());
@@ -201,8 +195,12 @@ const Browse = () => {
           </select>
         </div>
 
-        {/* No results message */}
-        {filteredItems.length === 0 && (
+        {/* Loading and No results */}
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="text-gray-600 dark:text-gray-400 text-lg">Loading listings...</div>
+          </div>
+        ) : filteredItems.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-600 dark:text-gray-400 text-lg mb-2">No rentals found</div>
             <p className="text-gray-500 dark:text-gray-500">Try adjusting your search or filters</p>

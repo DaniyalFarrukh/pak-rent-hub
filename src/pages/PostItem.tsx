@@ -46,7 +46,8 @@ const PostItem = () => {
     availableFrom: null as Date | null,
     availableTo: null as Date | null,
     rules: [''],
-    features: ['']
+    features: [''],
+    phone: ''
   });
 
   const categories = [
@@ -141,10 +142,10 @@ const PostItem = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.title || !formData.description || !formData.category || !formData.location) {
+    if (!formData.title || !formData.description || !formData.category || !formData.location || !formData.phone) {
       toast({
         title: 'Missing Information',
-        description: 'Please fill in all required fields.',
+        description: 'Please fill in all required fields including phone number.',
         variant: 'destructive'
       });
       return;
@@ -301,6 +302,22 @@ const PostItem = () => {
                   onChange={handleLocationChange}
                   required
                 />
+
+                <div>
+                  <Label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Contact Phone Number *
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="e.g., +92 300 1234567"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className="h-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Renters will use this number to contact you</p>
+                </div>
               </>
             )}
 
